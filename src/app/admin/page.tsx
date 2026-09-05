@@ -9,11 +9,32 @@ import { useRouter } from "next/navigation";
 interface UserProfile {
   id: number;
   username: string;
+  first_name: string;
   email: string;
   phone_number: string;
   telegram_username: string;
   is_staff: boolean;
   is_superuser: boolean;
+}
+
+interface AdminUser {
+  id: number;
+  username: string;
+  first_name: string;
+  email: string;
+  date_joined?: string;
+  is_staff: boolean;
+  is_active: boolean;
+}
+
+interface Startup {
+  id: number;
+  title: string;
+  price: string;
+  project_type_display: string;
+  owner_info: {
+    username: string;
+  };
 }
 
 type NavItem = {
@@ -44,24 +65,6 @@ const NAV_ITEMS: NavItem[] = [
       </svg>
     ),
   },
-  {
-    id: "stats",
-    label: "Statistika",
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" className="h-4 w-4 shrink-0">
-        <path d="M15.5 2A1.5 1.5 0 0 0 14 3.5v13a1.5 1.5 0 0 0 3 0v-13A1.5 1.5 0 0 0 15.5 2ZM9.5 6A1.5 1.5 0 0 0 8 7.5v9a1.5 1.5 0 0 0 3 0v-9A1.5 1.5 0 0 0 9.5 6ZM3.5 10A1.5 1.5 0 0 0 2 11.5v5a1.5 1.5 0 0 0 3 0v-5A1.5 1.5 0 0 0 3.5 10Z" />
-      </svg>
-    ),
-  },
-  {
-    id: "settings",
-    label: "Sozlamalar",
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" className="h-4 w-4 shrink-0">
-        <path fillRule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
-      </svg>
-    ),
-  },
 ];
 
 // ─── Asosiy komponent ─────────────────────────────────────────────────────────
@@ -72,7 +75,10 @@ export default function AdminPage() {
   const [user, setUser]           = useState<UserProfile | null>(null);
   const [loading, setLoading]     = useState(true);
   const [activeTab, setActiveTab] = useState("users");
-  const [startups, setStartups]   = useState<Record<string, unknown>[]>([]);
+  
+  const [users, setUsers]         = useState<AdminUser[]>([]);
+  const [startups, setStartups]   = useState<Startup[]>([]);
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // ── Ma'lumot olish + ruxsat tekshirish ────────────────────────────────────
@@ -93,9 +99,21 @@ export default function AdminPage() {
         if (!profile.is_staff) { router.replace("/"); return; }
         setUser(profile);
 
-        // Startaplar ro'yxati
-        const sRes = await fetch("http://127.0.0.1:8000/api/startups/");
-        if (sRes.ok) setStartups(await sRes.json());
+        // Fetch users (admin only endpoint)
+        const usersRes = await fetch("http://127.0.0.1:8000/api/admin/users/", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (usersRes.ok) {
+          setUsers(await usersRes.json());
+        }
+
+        // Fetch startups
+        const startupsRes = await fetch("http://127.0.0.1:8000/api/startups/", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (startupsRes.ok) {
+          setStartups(await startupsRes.json());
+        }
       } catch {
         router.replace("/");
       } finally {
@@ -105,6 +123,28 @@ export default function AdminPage() {
     init();
   }, [router]);
 
+  // ── User holatini o'zgartirish (Ban/Unban) ────────────────────────────────
+  async function toggleUserStatus(userId: number, currentStatus: boolean) {
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${userId}/toggle-status/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.ok) {
+        setUsers(users.map((u) => (u.id === userId ? { ...u, is_active: !currentStatus } : u)));
+      }
+    } catch (error) {
+      console.error("Foydalanuvchi holatini o'zgartirishda xatolik:", error);
+    }
+  }
+
   // ── Loading ───────────────────────────────────────────────────────────────
 
   if (loading) {
@@ -112,20 +152,11 @@ export default function AdminPage() {
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-          <p className="text-sm text-zinc-500">Tekshirilmoqda...</p>
+          <p className="text-sm text-zinc-500">Admin paneli yuklanmoqda...</p>
         </div>
       </div>
     );
   }
-
-  // ── Ko'rsatkichlar ────────────────────────────────────────────────────────
-
-  const STATS = [
-    { label: "Jami e'lonlar",   value: startups.length, icon: "📋", color: "from-indigo-500 to-violet-600" },
-    { label: "Faol foydalanuvchilar", value: "—",       icon: "👥", color: "from-emerald-500 to-teal-600"  },
-    { label: "Bu oylik savdolar",     value: "—",       icon: "💰", color: "from-amber-500 to-orange-600"  },
-    { label: "Platformaning foizi",   value: "—",       icon: "📈", color: "from-sky-500 to-blue-600"      },
-  ];
 
   // ── Sidebar nav element ───────────────────────────────────────────────────
 
@@ -168,9 +199,8 @@ export default function AdminPage() {
 
       {/* Navigatsiya */}
       <nav className="flex-1 space-y-1">
-        {NAV_ITEMS.map((item) => (
-          <SidebarLink key={item.id} item={item} />
-        ))}
+        <SidebarLink item={{ ...NAV_ITEMS[0], badge: users.length }} />
+        <SidebarLink item={{ ...NAV_ITEMS[1], badge: startups.length }} />
       </nav>
 
       {/* Admin info */}
@@ -210,39 +240,71 @@ export default function AdminPage() {
       case "users":
         return (
           <div>
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Foydalanuvchilar</h2>
-              <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">Barcha ro'yxatdan o'tgan foydalanuvchilar</p>
+            <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Foydalanuvchilar</h2>
+                <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">Barcha ro&apos;yxatdan o&apos;tgan foydalanuvchilar ({users.length})</p>
+              </div>
             </div>
-            <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-              <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-4 dark:border-zinc-800">
-                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Hozircha faqat siz</span>
-                <span className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-semibold text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-400">
-                  API kengaytirilmoqda
-                </span>
-              </div>
-              {/* Hozirgi admin user */}
-              <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                <div className="flex items-center gap-4 px-5 py-3.5">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-sm font-bold text-white">
-                    {user?.username?.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-zinc-900 dark:text-white">{user?.username}</p>
-                    <p className="truncate text-xs text-zinc-400">{user?.email || "Email yo'q"}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {user?.is_superuser && (
-                      <span className="rounded-full bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 dark:bg-purple-950/40 dark:text-purple-400">
-                        Superadmin
-                      </span>
-                    )}
-                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400">
-                      Faol
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <div className="overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <table className="w-full text-left text-sm text-zinc-600 dark:text-zinc-400">
+                <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/50">
+                  <tr>
+                    <th scope="col" className="px-6 py-4 font-semibold">ID</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Ism</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Foydalanuvchi nomi</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Email</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Ro&apos;yxatdan o&apos;tgan</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Holati</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                  {users.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="py-10 text-center">Foydalanuvchilar topilmadi</td>
+                    </tr>
+                  ) : (
+                    users.map((u) => (
+                      <tr key={u.id} className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                        <td className="px-6 py-4 font-medium text-zinc-900 dark:text-white">#{u.id}</td>
+                        <td className="px-6 py-4">{u.first_name || "—"}</td>
+                        <td className="px-6 py-4 font-medium text-indigo-600 dark:text-indigo-400">@{u.username}</td>
+                        <td className="px-6 py-4">{u.email || "—"}</td>
+                        <td className="px-6 py-4">
+                          {u.date_joined ? new Date(u.date_joined).toLocaleDateString('uz-UZ') : "—"}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            {/* Holat nishonchasi */}
+                            <span
+                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                                u.is_active
+                                  ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400"
+                                  : "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-400"
+                              }`}
+                            >
+                              {u.is_active ? "Faol" : "Bloklangan"}
+                            </span>
+                            
+                            {/* Harakat tugmasi */}
+                            <button
+                              type="button"
+                              onClick={() => toggleUserStatus(u.id, u.is_active)}
+                              className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition-all active:scale-95 ${
+                                u.is_active
+                                  ? "border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/50 dark:bg-red-950/30 dark:hover:bg-red-900/50"
+                                  : "border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:hover:bg-emerald-900/50"
+                              }`}
+                            >
+                              {u.is_active ? "Bloklash" : "Bandan ochish"}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         );
@@ -251,109 +313,56 @@ export default function AdminPage() {
       case "startups":
         return (
           <div>
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">E&apos;lonlar</h2>
-              <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">Platformadagi barcha startaplar</p>
-            </div>
-            <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-              {startups.length === 0 ? (
-                <div className="py-16 text-center text-zinc-400">
-                  <div className="mb-2 text-4xl">📭</div>
-                  <p className="text-sm">Hozircha e&apos;lonlar yo&apos;q</p>
-                </div>
-              ) : (
-                <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                  {/* Jadval sarlavhasi */}
-                  <div className="grid grid-cols-12 gap-4 bg-zinc-50 px-5 py-3 dark:bg-zinc-800/50">
-                    <div className="col-span-5 text-xs font-semibold uppercase tracking-wide text-zinc-400">Sarlavha</div>
-                    <div className="col-span-3 text-xs font-semibold uppercase tracking-wide text-zinc-400">Tur</div>
-                    <div className="col-span-2 text-xs font-semibold uppercase tracking-wide text-zinc-400">Narx</div>
-                    <div className="col-span-2 text-xs font-semibold uppercase tracking-wide text-zinc-400">Amallar</div>
-                  </div>
-                  {startups.map((s) => (
-                    <div key={String(s.id)} className="grid grid-cols-12 items-center gap-4 px-5 py-3.5">
-                      <div className="col-span-5 min-w-0">
-                        <p className="truncate text-sm font-medium text-zinc-900 dark:text-white">
-                          {String(s.title)}
-                        </p>
-                        <p className="truncate text-xs text-zinc-400">{String(s.tech_stack || "")}</p>
-                      </div>
-                      <div className="col-span-3">
-                        <span className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400">
-                          {String(s.project_type_display || s.project_type || "")}
-                        </span>
-                      </div>
-                      <div className="col-span-2 text-sm font-semibold text-zinc-900 dark:text-white">
-                        ${String(s.price || "0")}
-                      </div>
-                      <div className="col-span-2">
-                        <Link
-                          href={`/startups/${s.id}`}
-                          className="inline-flex h-7 items-center gap-1 rounded-lg border border-zinc-200 px-2.5 text-xs font-medium text-zinc-600 transition hover:border-indigo-300 hover:text-indigo-600 dark:border-zinc-700 dark:text-zinc-400"
-                        >
-                          Ko&apos;rish
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        );
-
-      // ── Statistika ──
-      case "stats":
-        return (
-          <div>
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Statistika</h2>
-              <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">Platform ko&apos;rsatkichlari</p>
-            </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {STATS.map((stat) => (
-                <div key={stat.label} className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-                  <div className={`absolute -right-4 -top-4 h-24 w-24 rounded-full bg-gradient-to-br ${stat.color} opacity-10`} />
-                  <div className="mb-3 text-2xl">{stat.icon}</div>
-                  <p className="text-2xl font-bold text-zinc-900 dark:text-white">{stat.value}</p>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-
-      // ── Sozlamalar ──
-      case "settings":
-        return (
-          <div>
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Sozlamalar</h2>
-              <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">Admin panel sozlamalari</p>
-            </div>
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-sm font-black text-white">
-                  {user?.username?.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <p className="font-semibold text-zinc-900 dark:text-white">{user?.username}</p>
-                  <p className="text-xs text-zinc-400">{user?.email || "Email yo'q"}</p>
-                </div>
+            <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white">E&apos;lonlar</h2>
+                <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">Platformadagi barcha startaplar ({startups.length})</p>
               </div>
-              <div className="space-y-3 text-sm">
-                {[
-                  { k: "Rol",        v: user?.is_superuser ? "Superadmin" : "Staff" },
-                  { k: "is_staff",   v: String(user?.is_staff)      },
-                  { k: "is_superuser", v: String(user?.is_superuser) },
-                  { k: "User ID",    v: `#${user?.id}`               },
-                ].map((row) => (
-                  <div key={row.k} className="flex items-center justify-between border-b border-zinc-100 py-2.5 last:border-0 dark:border-zinc-800">
-                    <span className="text-zinc-500 dark:text-zinc-400">{row.k}</span>
-                    <span className="font-medium text-zinc-900 dark:text-white">{row.v}</span>
-                  </div>
-                ))}
-              </div>
+            </div>
+            <div className="overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <table className="w-full text-left text-sm text-zinc-600 dark:text-zinc-400">
+                <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/50">
+                  <tr>
+                    <th scope="col" className="px-6 py-4 font-semibold">ID</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Nomi</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Turi</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Egasi</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Narxi</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Harakatlar</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                  {startups.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-10 text-center">E'lonlar topilmadi</td>
+                    </tr>
+                  ) : (
+                    startups.map((s) => (
+                      <tr key={s.id} className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                        <td className="px-6 py-4 font-medium text-zinc-900 dark:text-white">#{s.id}</td>
+                        <td className="px-6 py-4 font-medium text-zinc-900 dark:text-white">{s.title}</td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400">
+                            {s.project_type_display || "—"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 font-medium text-indigo-600 dark:text-indigo-400">
+                          @{s.owner_info?.username || "Noma'lum"}
+                        </td>
+                        <td className="px-6 py-4 font-semibold text-zinc-900 dark:text-white">${s.price}</td>
+                        <td className="px-6 py-4">
+                          <Link
+                            href={`/startups/${s.id}`}
+                            className="inline-flex items-center font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                          >
+                            Ko&apos;rish
+                          </Link>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         );
@@ -402,22 +411,6 @@ export default function AdminPage() {
         </div>
 
         <div className="p-6 lg:p-8">
-
-          {/* ── Statistika kartalar (dashboard tepasida) ── */}
-          {activeTab !== "stats" && (
-            <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-              {STATS.map((stat) => (
-                <div key={stat.label} className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white px-5 py-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-                  <div className={`absolute -right-3 -top-3 h-16 w-16 rounded-full bg-gradient-to-br ${stat.color} opacity-10`} />
-                  <div className="mb-1 text-xl">{stat.icon}</div>
-                  <p className="text-xl font-bold text-zinc-900 dark:text-white">{stat.value}</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* ── Asosiy kontent ── */}
           {renderContent()}
         </div>
       </main>
