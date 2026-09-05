@@ -28,7 +28,19 @@ export default function Home() {
       try {
         const res = await fetch("http://127.0.0.1:8000/api/startups/", {
           cache: "no-store",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+        
+        if (res.status === 401) {
+          // Token eskirgan yoki xato
+          localStorage.removeItem("access");
+          localStorage.removeItem("refresh");
+          router.push("/login");
+          return;
+        }
+
         if (res.ok) {
           const data = await res.json();
           setStartups(data);

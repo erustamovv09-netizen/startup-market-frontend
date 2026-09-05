@@ -12,9 +12,9 @@ export default function CreateStartupPage() {
     description: "",
     tech_stack: "",
     price: "",
-    project_type: "B2B",
-    demo_url: "",
-    github_url: "",
+    project_type: "website",
+    demo_link: "",
+    github_link: "",
   });
   
   const [loading, setLoading] = useState(false);
@@ -53,8 +53,8 @@ export default function CreateStartupPage() {
       price: Number(formData.price),
       project_type: formData.project_type,
     };
-    if (formData.demo_url) payload.demo_url = formData.demo_url;
-    if (formData.github_url) payload.github_url = formData.github_url;
+    if (formData.demo_link) payload.demo_link = formData.demo_link;
+    if (formData.github_link) payload.github_link = formData.github_link;
 
     try {
       const res = await fetch("http://127.0.0.1:8000/api/startups/", {
@@ -213,52 +213,51 @@ export default function CreateStartupPage() {
                 onChange={handleChange}
                 className={`block w-full appearance-none rounded-xl border ${fieldErrors.project_type && fieldErrors.project_type.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
               >
-                <option value="B2B">B2B Platforma</option>
-                <option value="B2C">B2C Xizmat</option>
-                <option value="SAAS">SaaS (Dasturiy Ta'minot)</option>
-                <option value="MARKETPLACE">Marketplace (Bozor)</option>
-                <option value="OTHER">Boshqa</option>
+                <option value="website">Veb-sayt</option>
+                <option value="telegram_bot">Telegram Bot</option>
+                <option value="mobile_app">Mobil Ilova</option>
+                <option value="other">Boshqa</option>
               </select>
               {fieldErrors.project_type && fieldErrors.project_type.length > 0 && (
                 <p className="mt-1 text-sm text-red-500">{fieldErrors.project_type[0]}</p>
               )}
             </div>
 
-            {/* Demo URL */}
+            {/* Demo Link */}
             <div>
-              <label htmlFor="demo_url" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="demo_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Jonli demo havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
               </label>
               <input
-                id="demo_url"
-                name="demo_url"
+                id="demo_link"
+                name="demo_link"
                 type="url"
-                value={formData.demo_url}
+                value={formData.demo_link}
                 onChange={handleChange}
                 placeholder="https://example.com"
-                className={`block w-full rounded-xl border ${fieldErrors.demo_url && fieldErrors.demo_url.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                className={`block w-full rounded-xl border ${fieldErrors.demo_link && fieldErrors.demo_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
               />
-              {fieldErrors.demo_url && fieldErrors.demo_url.length > 0 && (
-                <p className="mt-1 text-sm text-red-500">{fieldErrors.demo_url[0]}</p>
+              {fieldErrors.demo_link && fieldErrors.demo_link.length > 0 && (
+                <p className="mt-1 text-sm text-red-500">{fieldErrors.demo_link[0]}</p>
               )}
             </div>
 
-            {/* GitHub URL */}
+            {/* GitHub Link */}
             <div>
-              <label htmlFor="github_url" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="github_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 GitHub havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
               </label>
               <input
-                id="github_url"
-                name="github_url"
+                id="github_link"
+                name="github_link"
                 type="url"
-                value={formData.github_url}
+                value={formData.github_link}
                 onChange={handleChange}
                 placeholder="https://github.com/..."
-                className={`block w-full rounded-xl border ${fieldErrors.github_url && fieldErrors.github_url.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                className={`block w-full rounded-xl border ${fieldErrors.github_link && fieldErrors.github_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
               />
-              {fieldErrors.github_url && fieldErrors.github_url.length > 0 && (
-                <p className="mt-1 text-sm text-red-500">{fieldErrors.github_url[0]}</p>
+              {fieldErrors.github_link && fieldErrors.github_link.length > 0 && (
+                <p className="mt-1 text-sm text-red-500">{fieldErrors.github_link[0]}</p>
               )}
             </div>
           </div>

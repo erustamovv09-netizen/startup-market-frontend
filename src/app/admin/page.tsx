@@ -32,6 +32,7 @@ interface Startup {
   title: string;
   price: string;
   project_type_display: string;
+  is_premium?: boolean;
   owner_info: {
     username: string;
   };
@@ -145,6 +146,31 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error("E'lonni o'chirishda xatolik:", error);
+    }
+  }
+
+  // ── Startupni Premium qilish/ochirish ──────────────────────────────────────
+  async function togglePremium(startupId: number) {
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/admin/startups/${startupId}/toggle-premium/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        setStartups(startups.map((s) => 
+          s.id === startupId ? { ...s, is_premium: !s.is_premium } : s
+        ));
+      } else {
+        alert("Premium holatini o'zgartirishda xatolik yuz berdi.");
+      }
+    } catch (error) {
+      console.error("Premium holatini o'zgartirishda xatolik:", error);
     }
   }
 
@@ -353,13 +379,14 @@ export default function AdminPage() {
                     <th scope="col" className="px-6 py-4 font-semibold">Turi</th>
                     <th scope="col" className="px-6 py-4 font-semibold">Egasi</th>
                     <th scope="col" className="px-6 py-4 font-semibold">Narxi</th>
+                    <th scope="col" className="px-6 py-4 font-semibold">Premium</th>
                     <th scope="col" className="px-6 py-4 font-semibold">Harakatlar</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                   {startups.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-10 text-center">E'lonlar topilmadi</td>
+                      <td colSpan={7} className="py-10 text-center">E'lonlar topilmadi</td>
                     </tr>
                   ) : (
                     startups.map((s) => (
@@ -376,7 +403,29 @@ export default function AdminPage() {
                         </td>
                         <td className="px-6 py-4 font-semibold text-zinc-900 dark:text-white">${s.price}</td>
                         <td className="px-6 py-4">
+                          {s.is_premium ? (
+                            <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-500">
+                              ⭐ Premium
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                              Oddiy
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => togglePremium(s.id)}
+                              className={`font-medium ${
+                                s.is_premium
+                                  ? "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                                  : "text-yellow-600 hover:text-yellow-700 dark:text-yellow-500 dark:hover:text-yellow-400"
+                              }`}
+                            >
+                              {s.is_premium ? "Oddiy qilish" : "Premium qilish"}
+                            </button>
                             <Link
                               href={`/startups/${s.id}`}
                               className="inline-flex items-center font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
