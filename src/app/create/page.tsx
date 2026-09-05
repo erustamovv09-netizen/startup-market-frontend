@@ -12,7 +12,7 @@ export default function CreateStartupPage() {
     description: "",
     tech_stack: "",
     price: "",
-    project_type: "b2b",
+    project_type: "B2B",
     demo_url: "",
     github_url: "",
   });
@@ -213,11 +213,11 @@ export default function CreateStartupPage() {
                 onChange={handleChange}
                 className={`block w-full appearance-none rounded-xl border ${fieldErrors.project_type && fieldErrors.project_type.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
               >
-                <option value="b2b">B2B Platforma</option>
-                <option value="b2c">B2C Xizmat</option>
-                <option value="saas">SaaS (Dasturiy Ta'minot)</option>
-                <option value="marketplace">Marketplace (Bozor)</option>
-                <option value="other">Boshqa</option>
+                <option value="B2B">B2B Platforma</option>
+                <option value="B2C">B2C Xizmat</option>
+                <option value="SAAS">SaaS (Dasturiy Ta'minot)</option>
+                <option value="MARKETPLACE">Marketplace (Bozor)</option>
+                <option value="OTHER">Boshqa</option>
               </select>
               {fieldErrors.project_type && fieldErrors.project_type.length > 0 && (
                 <p className="mt-1 text-sm text-red-500">{fieldErrors.project_type[0]}</p>
