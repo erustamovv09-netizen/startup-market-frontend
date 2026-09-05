@@ -261,13 +261,13 @@ export default function AdminPage() {
                 <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                   {users.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-10 text-center">Foydalanuvchilar topilmadi</td>
+                      <td colSpan={6} className="py-10 text-center">Foydalanuvchilar topilmadi</td>
                     </tr>
                   ) : (
                     users.map((u) => (
                       <tr key={u.id} className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                         <td className="px-6 py-4 font-medium text-zinc-900 dark:text-white">#{u.id}</td>
-                        <td className="px-6 py-4">{u.first_name || "—"}</td>
+                        <td className="px-6 py-4">{u.first_name || "Kiritilmagan"}</td>
                         <td className="px-6 py-4 font-medium text-indigo-600 dark:text-indigo-400">@{u.username}</td>
                         <td className="px-6 py-4">{u.email || "—"}</td>
                         <td className="px-6 py-4">
