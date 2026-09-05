@@ -123,6 +123,31 @@ export default function AdminPage() {
     init();
   }, [router]);
 
+  // ── Startupni o'chirish ───────────────────────────────────────────────────
+  async function deleteStartup(id: number) {
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
+    if (!confirm("Rostdan ham bu e'lonni o'chirmoqchimisiz?")) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/admin/startups/${id}/delete/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        setStartups(startups.filter((s) => s.id !== id));
+      } else {
+        alert("O'chirishda xatolik yuz berdi.");
+      }
+    } catch (error) {
+      console.error("E'lonni o'chirishda xatolik:", error);
+    }
+  }
+
   // ── User holatini o'zgartirish (Ban/Unban) ────────────────────────────────
   async function toggleUserStatus(userId: number, currentStatus: boolean) {
     const token = localStorage.getItem("access");
@@ -351,12 +376,21 @@ export default function AdminPage() {
                         </td>
                         <td className="px-6 py-4 font-semibold text-zinc-900 dark:text-white">${s.price}</td>
                         <td className="px-6 py-4">
-                          <Link
-                            href={`/startups/${s.id}`}
-                            className="inline-flex items-center font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
-                          >
-                            Ko&apos;rish
-                          </Link>
+                          <div className="flex items-center gap-3">
+                            <Link
+                              href={`/startups/${s.id}`}
+                              className="inline-flex items-center font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                            >
+                              Ko&apos;rish
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => deleteStartup(s.id)}
+                              className="font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                            >
+                              O&apos;chirish
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
