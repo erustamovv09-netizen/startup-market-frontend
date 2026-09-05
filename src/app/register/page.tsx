@@ -58,13 +58,19 @@ export default function RegisterPage() {
   function validate(): boolean {
     const errors: FieldErrors = {};
 
+    if (!formData.firstName.trim()) {
+      errors.firstName = "Ismingiz talab qilinadi";
+    }
+
     if (!formData.username.trim()) {
       errors.username = "Foydalanuvchi nomi talab qilinadi";
     } else if (formData.username.length < 3) {
       errors.username = "Kamida 3 ta belgi bo'lishi kerak";
     }
 
-    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (!formData.email.trim()) {
+      errors.email = "Email talab qilinadi";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errors.email = "Email formati noto'g'ri";
     }
 
@@ -208,11 +214,8 @@ export default function RegisterPage() {
 
               {/* Ism */}
               <div>
-                <label htmlFor="reg-firstname" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  Ismingiz
-                  <span className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-xs font-normal text-zinc-400 dark:bg-zinc-800">
-                    ixtiyoriy
-                  </span>
+                <label htmlFor="reg-firstname" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Ismingiz <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="reg-firstname"
@@ -220,6 +223,7 @@ export default function RegisterPage() {
                   type="text"
                   autoComplete="given-name"
                   autoFocus
+                  required
                   value={formData.firstName}
                   onChange={handleChange}
                   placeholder="Alibek"
@@ -240,6 +244,7 @@ export default function RegisterPage() {
                   name="username"
                   type="text"
                   autoComplete="username"
+                  required
                   value={formData.username}
                   onChange={handleChange}
                   placeholder="johndoe"
@@ -252,17 +257,15 @@ export default function RegisterPage() {
 
               {/* Email */}
               <div>
-                <label htmlFor="reg-email" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  Email
-                  <span className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-xs font-normal text-zinc-400 dark:bg-zinc-800">
-                    ixtiyoriy
-                  </span>
+                <label htmlFor="reg-email" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Email <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="reg-email"
                   name="email"
                   type="email"
                   autoComplete="email"
+                  required
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="john@example.com"
@@ -284,6 +287,7 @@ export default function RegisterPage() {
                     name="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
+                    required
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Kamida 8 ta belgi"

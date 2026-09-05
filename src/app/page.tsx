@@ -1,40 +1,68 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import MarketplaceClient, { type Startup } from "./components/marketplace-client";
 
-// ─── SEO ──────────────────────────────────────────────────────────────────────
+// ─── Asosiy sahifa (Himoyalangan Client Component) ─────────────────────────
 
-export const metadata: Metadata = {
-  title: "StartUp Market — IT loyihalar bozori",
-  description:
-    "O'zbekistondagi eng yirik B2B IT loyihalar va startaplar bozori. Tayyor biznes xarid qiling yoki o'z loyihangizni soting.",
-  keywords: "startup, IT loyiha, sotish, xarid, O'zbekiston, b2b marketplace",
-};
+export default function Home() {
+  const router = useRouter();
 
-// ─── Ma'lumot olish ────────────────────────────────────────────────────────────
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [startups, setStartups]             = useState<Startup[]>([]);
+  const [isLoading, setIsLoading]           = useState(true);
 
-async function fetchStartups(): Promise<Startup[]> {
-  try {
-    const res = await fetch("http://127.0.0.1:8000/api/startups/", {
-      cache: "no-store",
-    });
-    if (!res.ok) return [];
-    return res.json();
-  } catch {
-    return [];
+  useEffect(() => {
+    // 1. Auth tekshirish
+    const token = localStorage.getItem("access");
+    if (!token) {
+      router.push("/login");
+      return; // Keyingi qatorlarga o'tmaslik uchun
+    }
+
+    setIsAuthChecking(false);
+
+    // 2. Startaplarni yuklash
+    async function fetchStartups() {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/startups/", {
+          cache: "no-store",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setStartups(data);
+        } else {
+          setStartups([]);
+        }
+      } catch {
+        setStartups([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchStartups();
+  }, [router]);
+
+  // Auth tekshirilayotganda yuklanish ekranini ko'rsatish
+  if (isAuthChecking || isLoading) {
+    return (
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white dark:bg-zinc-950">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            {isAuthChecking ? "Sessiya tekshirilmoqda..." : "E'lonlar yuklanmoqda..."}
+          </p>
+        </div>
+      </div>
+    );
   }
-}
-
-// ─── Asosiy sahifa (async SSR) ─────────────────────────────────────────────────
-
-export default async function Home() {
-  const startups = await fetchStartups();
 
   return (
     <div className="flex flex-col">
-
       {/* ══════════════════ HERO ══════════════════ */}
       <section className="relative overflow-hidden bg-white dark:bg-zinc-950">
-
         {/* Orqa fon blobi */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -top-48 left-1/2 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-gradient-to-br from-indigo-100 via-violet-100 to-purple-100 opacity-50 blur-3xl dark:from-indigo-950 dark:via-violet-950 dark:to-purple-950 dark:opacity-30" />
@@ -44,7 +72,6 @@ export default async function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-12 sm:px-6 sm:pb-12 sm:pt-16 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-
             {/* Tepa pill badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-200/80 bg-indigo-50/80 px-4 py-1.5 backdrop-blur dark:border-indigo-800/60 dark:bg-indigo-950/50">
               <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
@@ -88,7 +115,7 @@ export default async function Home() {
               bir joyda. Xavfsiz va tez savdo platformasi.
             </p>
 
-            {/* CTA tugma — faqat bitta: Startaplarni ko'rish */}
+            {/* CTA tugma */}
             <div className="flex items-center justify-center">
               <a
                 href="#listings"
@@ -131,7 +158,6 @@ export default async function Home() {
         id="listings"
         className="bg-white pt-10 dark:bg-zinc-950"
       >
-        {/* Bo'lim sarlavhasi */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
