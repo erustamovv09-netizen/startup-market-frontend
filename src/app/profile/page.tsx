@@ -15,12 +15,22 @@ interface UserProfile {
   telegram_username: string;
 }
 
+interface MyStartup {
+  id: number;
+  title: string;
+  description: string;
+  price: string;
+  project_type_display: string;
+  is_premium: boolean;
+}
+
 // ─── Sahifa ───────────────────────────────────────────────────────────────────
 
 export default function ProfilePage() {
   const router = useRouter();
 
   const [user, setUser]               = useState<UserProfile | null>(null);
+  const [myStartups, setMyStartups]   = useState<MyStartup[]>([]);
   const [loading, setLoading]         = useState(true);
   const [fetchError, setFetchError]   = useState("");
   const [logoutModal, setLogoutModal] = useState(false);
@@ -37,14 +47,21 @@ export default function ProfilePage() {
 
     async function fetchProfile() {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/profile/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const [profileRes, startupsRes] = await Promise.all([
+          fetch("http://127.0.0.1:8000/api/profile/", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }),
+          fetch("http://127.0.0.1:8000/api/my-startups/", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+        ]);
 
-        if (res.status === 401) {
+        if (profileRes.status === 401) {
           // Token eskirgan — login sahifasiga yo'naltirish
           localStorage.removeItem("access");
           localStorage.removeItem("refresh");
@@ -52,13 +69,18 @@ export default function ProfilePage() {
           return;
         }
 
-        if (!res.ok) {
+        if (!profileRes.ok) {
           setFetchError("Profil ma'lumotlarini yuklab bo'lmadi.");
           return;
         }
 
-        const data: UserProfile = await res.json();
+        const data: UserProfile = await profileRes.json();
         setUser(data);
+
+        if (startupsRes.ok) {
+          const startupsData: MyStartup[] = await startupsRes.json();
+          setMyStartups(startupsData);
+        }
       } catch {
         setFetchError("Serverga ulanib bo'lmadi.");
       } finally {
@@ -68,6 +90,32 @@ export default function ProfilePage() {
 
     fetchProfile();
   }, [router]);
+
+  // ── Mening e'lonimni o'chirish ─────────────────────────────────────────────
+
+  async function deleteMyStartup(id: number) {
+    if (!confirm("Haqiqatan ham bu e'lonni o'chirmoqchimisiz?")) return;
+    
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/my-startups/${id}/delete/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        setMyStartups(myStartups.filter((s) => s.id !== id));
+      } else {
+        alert("O'chirishda xatolik yuz berdi.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   // ── Chiqish ────────────────────────────────────────────────────────────────
 
@@ -310,7 +358,7 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* ── Mening e'lonlarim (placeholder) ── */}
+            {/* ── Mening e'lonlarim ── */}
             <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between border-b border-zinc-100 px-6 py-4 dark:border-zinc-800">
                 <div>
@@ -318,7 +366,7 @@ export default function ProfilePage() {
                     Mening e&apos;lonlarim
                   </h3>
                   <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">
-                    Siz joylashtirilgan startaplar
+                    Siz joylashtirilgan startaplar ({myStartups.length})
                   </p>
                 </div>
                 <Link
@@ -328,22 +376,74 @@ export default function ProfilePage() {
                   + Yangi
                 </Link>
               </div>
-              <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
-                <div className="mb-3 text-4xl">📭</div>
-                <h4 className="mb-1.5 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                  Hozircha e&apos;lonlar yo&apos;q
-                </h4>
-                <p className="mb-5 text-xs text-zinc-400 dark:text-zinc-500">
-                  Birinchi loyihangizni joylashtiring va xaridorlarni jalb qiling
-                </p>
-                <Link
-                  href="/create"
-                  id="profile-empty-create-btn"
-                  className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700"
-                >
-                  E&apos;lon berish →
-                </Link>
-              </div>
+              
+              {myStartups.length === 0 ? (
+                <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
+                  <div className="mb-3 text-4xl">📭</div>
+                  <h4 className="mb-1.5 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                    Sizda hozircha e&apos;lonlar yo&apos;q
+                  </h4>
+                  <p className="mb-5 text-xs text-zinc-400 dark:text-zinc-500">
+                    Birinchi loyihangizni joylashtiring va xaridorlarni jalb qiling
+                  </p>
+                  <Link
+                    href="/create"
+                    id="profile-empty-create-btn"
+                    className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-indigo-600 px-5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+                  >
+                    E&apos;lon berish →
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2">
+                  {myStartups.map((s) => (
+                    <article
+                      key={s.id}
+                      className="group relative flex flex-col rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/50"
+                    >
+                      {s.is_premium && (
+                        <div className="absolute inset-x-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-yellow-400 to-yellow-600" />
+                      )}
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                          {s.project_type_display}
+                        </span>
+                        {s.is_premium && (
+                          <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">
+                            ⭐ Premium
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="mb-1 text-sm font-semibold text-zinc-900 dark:text-white line-clamp-1">
+                        {s.title}
+                      </h4>
+                      <p className="mb-4 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
+                        {s.description}
+                      </p>
+                      
+                      <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-700/50">
+                        <span className="font-bold text-zinc-900 dark:text-white">
+                          ${s.price}
+                        </span>
+                        <div className="flex gap-2">
+                          <Link
+                            href={`/startups/${s.id}`}
+                            className="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600/80"
+                          >
+                            Ko&apos;rish
+                          </Link>
+                          <button
+                            onClick={() => deleteMyStartup(s.id)}
+                            className="inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-900/50"
+                          >
+                            O&apos;chirish
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* ── Xavfli zona ── */}

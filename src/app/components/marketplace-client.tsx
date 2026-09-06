@@ -15,6 +15,9 @@ export interface Startup {
   project_type_display: string;
   demo_link: string | null;
   github_link: string | null;
+  bot_username?: string | null;
+  play_store_link?: string | null;
+  app_store_link?: string | null;
   is_premium: boolean;
   created_at: string;
   owner_info: { id: number; username: string; email: string };
@@ -120,6 +123,70 @@ function StartupCard({ s }: { s: Startup }) {
             <span className="rounded-md border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-xs text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800">
               +{techList.length - 4}
             </span>
+          )}
+        </div>
+
+        {/* Dinamik Havolalar (Loyiha turiga qarab) */}
+        <div className="mb-4 flex flex-wrap gap-2">
+          {s.project_type === "telegram_bot" && s.bot_username && (
+            <a
+              href={`https://t.me/${s.bot_username.replace("@", "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-md bg-sky-50 px-2 py-1.5 text-xs font-semibold text-sky-600 transition hover:bg-sky-100 dark:bg-sky-900/30 dark:text-sky-400 dark:hover:bg-sky-900/50"
+            >
+              🤖 Botga o'tish
+            </a>
+          )}
+
+          {s.project_type === "mobile_app" && (
+            <>
+              {s.play_store_link && (
+                <a
+                  href={s.play_store_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-1.5 text-xs font-semibold text-emerald-600 transition hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50"
+                >
+                  ▶️ Play Store
+                </a>
+              )}
+              {s.app_store_link && (
+                <a
+                  href={s.app_store_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-1.5 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                >
+                  🍏 App Store
+                </a>
+              )}
+            </>
+          )}
+
+          {s.project_type !== "telegram_bot" && s.project_type !== "mobile_app" && (
+            <>
+              {s.demo_link && (
+                <a
+                  href={s.demo_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-md bg-indigo-50 px-2 py-1.5 text-xs font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+                >
+                  🌐 Jonli Demo
+                </a>
+              )}
+              {s.github_link && (
+                <a
+                  href={s.github_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-1.5 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                >
+                  💻 GitHub
+                </a>
+              )}
+            </>
           )}
         </div>
 
