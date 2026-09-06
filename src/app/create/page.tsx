@@ -15,6 +15,9 @@ export default function CreateStartupPage() {
     project_type: "website",
     demo_link: "",
     github_link: "",
+    bot_username: "",
+    play_store_link: "",
+    app_store_link: "",
   });
   
   const [loading, setLoading] = useState(false);
@@ -53,8 +56,16 @@ export default function CreateStartupPage() {
       price: Number(formData.price),
       project_type: formData.project_type,
     };
-    if (formData.demo_link) payload.demo_link = formData.demo_link;
-    if (formData.github_link) payload.github_link = formData.github_link;
+
+    if (formData.project_type === "telegram_bot") {
+      if (formData.bot_username) payload.bot_username = formData.bot_username;
+    } else if (formData.project_type === "mobile_app") {
+      if (formData.play_store_link) payload.play_store_link = formData.play_store_link;
+      if (formData.app_store_link) payload.app_store_link = formData.app_store_link;
+    } else {
+      if (formData.demo_link) payload.demo_link = formData.demo_link;
+      if (formData.github_link) payload.github_link = formData.github_link;
+    }
 
     try {
       const res = await fetch("http://127.0.0.1:8000/api/startups/", {
@@ -216,6 +227,8 @@ export default function CreateStartupPage() {
                 <option value="website">Veb-sayt</option>
                 <option value="telegram_bot">Telegram Bot</option>
                 <option value="mobile_app">Mobil Ilova</option>
+                <option value="saas">SaaS</option>
+                <option value="ecommerce">E-Commerce</option>
                 <option value="other">Boshqa</option>
               </select>
               {fieldErrors.project_type && fieldErrors.project_type.length > 0 && (
@@ -223,43 +236,116 @@ export default function CreateStartupPage() {
               )}
             </div>
 
-            {/* Demo Link */}
-            <div>
-              <label htmlFor="demo_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Jonli demo havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
-              </label>
-              <input
-                id="demo_link"
-                name="demo_link"
-                type="url"
-                value={formData.demo_link}
-                onChange={handleChange}
-                placeholder="https://example.com"
-                className={`block w-full rounded-xl border ${fieldErrors.demo_link && fieldErrors.demo_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
-              />
-              {fieldErrors.demo_link && fieldErrors.demo_link.length > 0 && (
-                <p className="mt-1 text-sm text-red-500">{fieldErrors.demo_link[0]}</p>
-              )}
-            </div>
+            {/* ════ Dinamik havolalar (Loyiha turiga qarab) ════ */}
+            
+            {formData.project_type === "telegram_bot" && (
+              <div>
+                <label htmlFor="bot_username" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Bot Username <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
+                </label>
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                    <span className="text-zinc-500 dark:text-zinc-400">@</span>
+                  </div>
+                  <input
+                    id="bot_username"
+                    name="bot_username"
+                    type="text"
+                    value={formData.bot_username}
+                    onChange={handleChange}
+                    placeholder="example_bot"
+                    className={`block w-full rounded-xl border ${fieldErrors.bot_username && fieldErrors.bot_username.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white py-2.5 pl-8 pr-4 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                  />
+                </div>
+                {fieldErrors.bot_username && fieldErrors.bot_username.length > 0 && (
+                  <p className="mt-1 text-sm text-red-500">{fieldErrors.bot_username[0]}</p>
+                )}
+              </div>
+            )}
 
-            {/* GitHub Link */}
-            <div>
-              <label htmlFor="github_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                GitHub havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
-              </label>
-              <input
-                id="github_link"
-                name="github_link"
-                type="url"
-                value={formData.github_link}
-                onChange={handleChange}
-                placeholder="https://github.com/..."
-                className={`block w-full rounded-xl border ${fieldErrors.github_link && fieldErrors.github_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
-              />
-              {fieldErrors.github_link && fieldErrors.github_link.length > 0 && (
-                <p className="mt-1 text-sm text-red-500">{fieldErrors.github_link[0]}</p>
-              )}
-            </div>
+            {formData.project_type === "mobile_app" && (
+              <>
+                {/* Play Store Link */}
+                <div>
+                  <label htmlFor="play_store_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    Play Store Havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
+                  </label>
+                  <input
+                    id="play_store_link"
+                    name="play_store_link"
+                    type="url"
+                    value={formData.play_store_link}
+                    onChange={handleChange}
+                    placeholder="https://play.google.com/..."
+                    className={`block w-full rounded-xl border ${fieldErrors.play_store_link && fieldErrors.play_store_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                  />
+                  {fieldErrors.play_store_link && fieldErrors.play_store_link.length > 0 && (
+                    <p className="mt-1 text-sm text-red-500">{fieldErrors.play_store_link[0]}</p>
+                  )}
+                </div>
+
+                {/* App Store Link */}
+                <div>
+                  <label htmlFor="app_store_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    App Store Havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
+                  </label>
+                  <input
+                    id="app_store_link"
+                    name="app_store_link"
+                    type="url"
+                    value={formData.app_store_link}
+                    onChange={handleChange}
+                    placeholder="https://apps.apple.com/..."
+                    className={`block w-full rounded-xl border ${fieldErrors.app_store_link && fieldErrors.app_store_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                  />
+                  {fieldErrors.app_store_link && fieldErrors.app_store_link.length > 0 && (
+                    <p className="mt-1 text-sm text-red-500">{fieldErrors.app_store_link[0]}</p>
+                  )}
+                </div>
+              </>
+            )}
+
+            {["website", "saas", "ecommerce", "other"].includes(formData.project_type) && (
+              <>
+                {/* Demo Link */}
+                <div>
+                  <label htmlFor="demo_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    Jonli demo havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
+                  </label>
+                  <input
+                    id="demo_link"
+                    name="demo_link"
+                    type="url"
+                    value={formData.demo_link}
+                    onChange={handleChange}
+                    placeholder="https://example.com"
+                    className={`block w-full rounded-xl border ${fieldErrors.demo_link && fieldErrors.demo_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                  />
+                  {fieldErrors.demo_link && fieldErrors.demo_link.length > 0 && (
+                    <p className="mt-1 text-sm text-red-500">{fieldErrors.demo_link[0]}</p>
+                  )}
+                </div>
+
+                {/* GitHub Link */}
+                <div>
+                  <label htmlFor="github_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    GitHub havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
+                  </label>
+                  <input
+                    id="github_link"
+                    name="github_link"
+                    type="url"
+                    value={formData.github_link}
+                    onChange={handleChange}
+                    placeholder="https://github.com/..."
+                    className={`block w-full rounded-xl border ${fieldErrors.github_link && fieldErrors.github_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                  />
+                  {fieldErrors.github_link && fieldErrors.github_link.length > 0 && (
+                    <p className="mt-1 text-sm text-red-500">{fieldErrors.github_link[0]}</p>
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Tugmalar */}
