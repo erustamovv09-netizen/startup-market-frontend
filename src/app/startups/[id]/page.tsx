@@ -368,9 +368,9 @@ export default async function StartupDetailPage({ params }: Props) {
               )}
 
               {/* Sotib olish / Bog'lanish CTA */}
-              <button
+              <Link
+                href={`/chat?receiver_id=${startup.owner_info.id}&startup_id=${startup.id}`}
                 id="detail-contact-btn"
-                type="button"
                 className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition-all duration-200 hover:opacity-90 hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95"
               >
                 <svg
@@ -382,7 +382,7 @@ export default async function StartupDetailPage({ params }: Props) {
                   <path d="M3.105 2.288a.75.75 0 0 0-.826.95l1.414 4.926A1.5 1.5 0 0 0 5.135 9.25h6.115a.75.75 0 0 1 0 1.5H5.135a1.5 1.5 0 0 0-1.442 1.086l-1.414 4.926a.75.75 0 0 0 .826.95 28.897 28.897 0 0 0 15.293-7.154.75.75 0 0 0 0-1.115A28.897 28.897 0 0 0 3.105 2.288Z" />
                 </svg>
                 Sotuvchi bilan bog&apos;lanish
-              </button>
+              </Link>
             </div>
           </div>
         </div>
