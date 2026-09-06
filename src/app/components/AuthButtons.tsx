@@ -72,6 +72,18 @@ export default function AuthButtons() {
         </Link>
       )}
 
+      {/* Xabarlar (Inbox) tugmasi */}
+      <Link
+        href="/inbox"
+        id="nav-inbox-btn"
+        aria-label="Xabarlar"
+        className="group relative flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-600 transition-all duration-150 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:border-indigo-600 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-400"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" className="h-4 w-4 shrink-0">
+          <path fillRule="evenodd" d="M2 5.5A1.5 1.5 0 0 1 3.5 4h13A1.5 1.5 0 0 1 18 5.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 2 14.5v-9ZM3.879 5.51a.75.75 0 0 0-1.061 1.061l6.652 6.652a.75.75 0 0 0 1.06 0l6.652-6.652a.75.75 0 1 0-1.061-1.061L10 11.603 3.879 5.51Z" clipRule="evenodd" />
+        </svg>
+      </Link>
+
       {/* Profil ikonkasi */}
       <Link
         href="/profile"
