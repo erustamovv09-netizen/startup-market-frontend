@@ -175,7 +175,7 @@ export default function AdminPage() {
   }
 
   // ── User holatini o'zgartirish (Ban/Unban) ────────────────────────────────
-  async function toggleUserStatus(userId: number, currentStatus: boolean) {
+  async function toggleUserStatus(userId: number) {
     const token = localStorage.getItem("access");
     if (!token) return;
 
@@ -184,12 +184,14 @@ export default function AdminPage() {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       });
 
       if (res.ok) {
-        setUsers(users.map((u) => (u.id === userId ? { ...u, is_active: !currentStatus } : u)));
+        const data = await res.json();
+        setUsers(users.map((u) => (u.id === userId ? { ...u, is_active: data.is_active } : u)));
+      } else {
+        alert("Foydalanuvchi holatini o'zgartirishda xatolik yuz berdi.");
       }
     } catch (error) {
       console.error("Foydalanuvchi holatini o'zgartirishda xatolik:", error);
@@ -340,7 +342,7 @@ export default function AdminPage() {
                             {/* Harakat tugmasi */}
                             <button
                               type="button"
-                              onClick={() => toggleUserStatus(u.id, u.is_active)}
+                              onClick={() => toggleUserStatus(u.id)}
                               className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition-all active:scale-95 ${
                                 u.is_active
                                   ? "border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/50 dark:bg-red-950/30 dark:hover:bg-red-900/50"
