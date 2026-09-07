@@ -175,28 +175,28 @@ export default function AdminPage() {
   }
 
   // ── User holatini o'zgartirish (Ban/Unban) ────────────────────────────────
-  async function toggleUserStatus(userId: number) {
-    const token = localStorage.getItem("access");
-    if (!token) return;
-
+  const toggleUserStatus = async (userId: number) => {
     try {
+      const token = localStorage.getItem('access');
       const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${userId}/toggle-status/`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
-
+      
       if (res.ok) {
         const data = await res.json();
-        setUsers(users.map((u) => (u.id === userId ? { ...u, is_active: data.is_active } : u)));
+        setUsers(users.map(u => u.id === userId ? { ...u, is_active: data.is_active } : u));
       } else {
-        alert("Foydalanuvchi holatini o'zgartirishda xatolik yuz berdi.");
+        alert(`Xatolik: Server ${res.status} kodini qaytardi. Agar 401 bo'lsa, profilingizdan chiqib qayta kiring.`);
       }
     } catch (error) {
-      console.error("Foydalanuvchi holatini o'zgartirishda xatolik:", error);
+      console.error("Ban error:", error);
+      alert("Tarmoq xatosi yuz berdi. Backend ishlayotganini tekshiring.");
     }
-  }
+  };
 
   // ── Loading ───────────────────────────────────────────────────────────────
 
