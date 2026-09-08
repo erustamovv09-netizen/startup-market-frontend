@@ -398,8 +398,10 @@ export default function ProfilePage() {
               ) : (
                 <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2">
                   {myStartups.map((s) => {
-                    const isEditable =
-                      (new Date().getTime() - new Date(s.created_at).getTime()) / 60000 <= 15;
+                    const createdDate  = new Date(s.created_at).getTime();
+                    const now          = Date.now();
+                    const diffMinutes  = (now - createdDate) / 60000;
+                    const isEditable   = diffMinutes >= 0 && diffMinutes <= 15;
                     return (
                       <article
                         key={s.id}
