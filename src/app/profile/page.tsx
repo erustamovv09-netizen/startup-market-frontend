@@ -22,6 +22,7 @@ interface MyStartup {
   price: string;
   project_type_display: string;
   is_premium: boolean;
+  created_at: string;
 }
 
 // ─── Sahifa ───────────────────────────────────────────────────────────────────
@@ -396,52 +397,64 @@ export default function ProfilePage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2">
-                  {myStartups.map((s) => (
-                    <article
-                      key={s.id}
-                      className="group relative flex flex-col rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/50"
-                    >
-                      {s.is_premium && (
-                        <div className="absolute inset-x-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-yellow-400 to-yellow-600" />
-                      )}
-                      <div className="mb-2 flex items-center justify-between">
-                        <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                          {s.project_type_display}
-                        </span>
+                  {myStartups.map((s) => {
+                    const isEditable =
+                      (new Date().getTime() - new Date(s.created_at).getTime()) / 60000 <= 15;
+                    return (
+                      <article
+                        key={s.id}
+                        className="group relative flex flex-col rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/50"
+                      >
                         {s.is_premium && (
-                          <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">
-                            ⭐ Premium
-                          </span>
+                          <div className="absolute inset-x-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-yellow-400 to-yellow-600" />
                         )}
-                      </div>
-                      <h4 className="mb-1 text-sm font-semibold text-zinc-900 dark:text-white line-clamp-1">
-                        {s.title}
-                      </h4>
-                      <p className="mb-4 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
-                        {s.description}
-                      </p>
-                      
-                      <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-700/50">
-                        <span className="font-bold text-zinc-900 dark:text-white">
-                          ${s.price}
-                        </span>
-                        <div className="flex gap-2">
-                          <Link
-                            href={`/startups/${s.id}`}
-                            className="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600/80"
-                          >
-                            Ko&apos;rish
-                          </Link>
-                          <button
-                            onClick={() => deleteMyStartup(s.id)}
-                            className="inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-900/50"
-                          >
-                            O&apos;chirish
-                          </button>
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                            {s.project_type_display}
+                          </span>
+                          {s.is_premium && (
+                            <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">
+                              ⭐ Premium
+                            </span>
+                          )}
                         </div>
-                      </div>
-                    </article>
-                  ))}
+                        <h4 className="mb-1 text-sm font-semibold text-zinc-900 dark:text-white line-clamp-1">
+                          {s.title}
+                        </h4>
+                        <p className="mb-4 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
+                          {s.description}
+                        </p>
+
+                        <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-700/50">
+                          <span className="font-bold text-zinc-900 dark:text-white">
+                            ${s.price}
+                          </span>
+                          <div className="flex gap-2">
+                            <Link
+                              href={`/startups/${s.id}`}
+                              className="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600/80"
+                            >
+                              Ko&apos;rish
+                            </Link>
+                            {isEditable && (
+                              <button
+                                onClick={() => router.push(`/edit/${s.id}`)}
+                                className="inline-flex items-center justify-center rounded-md border border-yellow-300 bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"
+                              >
+                                ✏️ Tahrirlash
+                              </button>
+                            )}
+                            <button
+                              onClick={() => deleteMyStartup(s.id)}
+                              className="inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-900/50"
+                            >
+                              O&apos;chirish
+                            </button>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
                 </div>
               )}
             </div>
