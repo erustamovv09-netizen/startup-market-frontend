@@ -434,6 +434,12 @@ export default function AdminPage() {
                             >
                               Ko&apos;rish
                             </Link>
+                            <Link
+                              href={`/admin/edit/${s.id}`}
+                              className="inline-flex items-center rounded-md border border-yellow-300 bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"
+                            >
+                              ✏️ Tahrirlash
+                            </Link>
                             <button
                               type="button"
                               onClick={() => deleteStartup(s.id)}

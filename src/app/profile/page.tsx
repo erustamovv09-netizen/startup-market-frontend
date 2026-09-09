@@ -323,17 +323,7 @@ export default function ProfilePage() {
                       </svg>
                     ),
                   },
-                  {
-                    label: "Telegram",
-                    value: user?.telegram_username
-                      ? `@${user.telegram_username}`
-                      : "—",
-                    icon: (
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15" className="h-[15px] w-[15px] shrink-0 text-zinc-400">
-                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                      </svg>
-                    ),
-                  },
+
                   {
                     label: "Foydalanuvchi ID",
                     value: user?.id ? `#${user.id}` : "—",
@@ -397,66 +387,58 @@ export default function ProfilePage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2">
-                  {myStartups.map((s) => {
-                    const createdDate  = new Date(s.created_at).getTime();
-                    const now          = Date.now();
-                    const diffMinutes  = (now - createdDate) / 60000;
-                    const isEditable   = diffMinutes >= 0 && diffMinutes <= 15;
-                    return (
-                      <article
-                        key={s.id}
-                        className="group relative flex flex-col rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/50"
-                      >
+                {myStartups.map((s) => (
+                    <article
+                      key={s.id}
+                      className="group relative flex flex-col rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/50"
+                    >
+                      {s.is_premium && (
+                        <div className="absolute inset-x-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-yellow-400 to-yellow-600" />
+                      )}
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                          {s.project_type_display}
+                        </span>
                         {s.is_premium && (
-                          <div className="absolute inset-x-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-yellow-400 to-yellow-600" />
+                          <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">
+                            ⭐ Premium
+                          </span>
                         )}
-                        <div className="mb-2 flex items-center justify-between">
-                          <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                            {s.project_type_display}
-                          </span>
-                          {s.is_premium && (
-                            <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">
-                              ⭐ Premium
-                            </span>
-                          )}
-                        </div>
-                        <h4 className="mb-1 text-sm font-semibold text-zinc-900 dark:text-white line-clamp-1">
-                          {s.title}
-                        </h4>
-                        <p className="mb-4 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
-                          {s.description}
-                        </p>
+                      </div>
+                      <h4 className="mb-1 text-sm font-semibold text-zinc-900 dark:text-white line-clamp-1">
+                        {s.title}
+                      </h4>
+                      <p className="mb-4 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
+                        {s.description}
+                      </p>
 
-                        <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-700/50">
-                          <span className="font-bold text-zinc-900 dark:text-white">
-                            ${s.price}
-                          </span>
-                          <div className="flex gap-2">
-                            <Link
-                              href={`/startups/${s.id}`}
-                              className="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600/80"
-                            >
-                              Ko&apos;rish
-                            </Link>
-                            {isEditable && (
-                              <button
-                                onClick={() => router.push(`/edit/${s.id}`)}
-                                className="inline-flex items-center justify-center rounded-md border border-yellow-300 bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"
-                              >
-                                ✏️ Tahrirlash
-                              </button>
-                            )}
-                            <button
-                              onClick={() => deleteMyStartup(s.id)}
-                              className="inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-900/50"
-                            >
-                              O&apos;chirish
-                            </button>
-                          </div>
+                      <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-700/50">
+                        <span className="font-bold text-zinc-900 dark:text-white">
+                          ${s.price}
+                        </span>
+                        <div className="flex gap-2">
+                          <Link
+                            href={`/startups/${s.id}`}
+                            className="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600/80"
+                          >
+                            Ko&apos;rish
+                          </Link>
+                          <button
+                            onClick={() => router.push(`/edit/${s.id}`)}
+                            className="inline-flex items-center justify-center rounded-md border border-yellow-300 bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"
+                          >
+                            ✏️ Tahrirlash
+                          </button>
+                          <button
+                            onClick={() => deleteMyStartup(s.id)}
+                            className="inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-900/50"
+                          >
+                            O&apos;chirish
+                          </button>
                         </div>
-                      </article>
-                    );
-                  })}
+                      </div>
+                    </article>
+                  ))}
                 </div>
               )}
             </div>
