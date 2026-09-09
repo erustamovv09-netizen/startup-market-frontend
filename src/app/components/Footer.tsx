@@ -5,7 +5,7 @@ import Link from "next/link";
 const PLATFORM_LINKS = [
   { href: "/",       label: "Barcha e'lonlar" },
   { href: "/create", label: "E'lon berish"    },
-  { href: "/how",    label: "Qanday ishlaydi?" },
+  { href: "/how-it-works", label: "Qanday ishlaydi?" },
   { href: "/pricing",label: "Tariflar"         },
 ];
 
@@ -19,7 +19,7 @@ const HELP_LINKS = [
 const LEGAL_LINKS = [
   { href: "/terms",   label: "Foydalanish shartlari" },
   { href: "/privacy", label: "Maxfiylik siyosati"    },
-  { href: "/cookies", label: "Cookie siyosati"       },
+  { href: "/cookie", label: "Cookie siyosati"       },
 ];
 
 // ─── Ijtimoiy tarmoqlar ───────────────────────────────────────────────────────
@@ -27,7 +27,7 @@ const LEGAL_LINKS = [
 const SOCIALS = [
   {
     id: "footer-telegram",
-    href: "https://t.me/startupmarket_uz",
+    href: "https://t.me/Rustamovv_E",
     label: "Telegram",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" className="h-[18px] w-[18px] shrink-0" aria-hidden>
@@ -37,7 +37,7 @@ const SOCIALS = [
   },
   {
     id: "footer-instagram",
-    href: "https://instagram.com/startupmarket_uz",
+    href: "https://instagram.com/rustamovv.09",
     label: "Instagram",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" className="h-[18px] w-[18px] shrink-0" aria-hidden>
@@ -47,7 +47,7 @@ const SOCIALS = [
   },
   {
     id: "footer-github",
-    href: "https://github.com/startupmarket-uz",
+    href: "https://github.com/erustamovv09-netizen",
     label: "GitHub",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" className="h-[18px] w-[18px] shrink-0" aria-hidden>
