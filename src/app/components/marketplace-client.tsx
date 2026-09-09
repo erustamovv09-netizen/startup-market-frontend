@@ -111,9 +111,9 @@ function StartupCard({ s }: { s: Startup }) {
 
         {/* Tech badges */}
         <div className="mb-4 flex flex-wrap gap-1">
-          {techList.slice(0, 4).map((t) => (
+          {techList.slice(0, 4).map((t, i) => (
             <span
-              key={t}
+              key={`${t}-${i}`}
               className="rounded-md border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-xs text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
             >
               {t}
@@ -166,16 +166,7 @@ function StartupCard({ s }: { s: Startup }) {
 
           {s.project_type !== "telegram_bot" && s.project_type !== "mobile_app" && (
             <>
-              {s.demo_link && (
-                <a
-                  href={s.demo_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-md bg-indigo-50 px-2 py-1.5 text-xs font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
-                >
-                  🌐 Jonli Demo
-                </a>
-              )}
+
               {s.github_link && (
                 <a
                   href={s.github_link}

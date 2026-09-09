@@ -216,9 +216,9 @@ export default async function StartupDetailPage({ params }: Props) {
                 Texnologiyalar
               </h2>
               <div className="flex flex-wrap gap-2">
-                {techList.map((tech) => (
+                {techList.map((tech, idx) => (
                   <span
-                    key={tech}
+                    key={`${tech}-${idx}`}
                     className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 font-mono text-sm text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
                   >
                     {tech}
@@ -381,7 +381,7 @@ export default async function StartupDetailPage({ params }: Props) {
                 >
                   <path d="M3.105 2.288a.75.75 0 0 0-.826.95l1.414 4.926A1.5 1.5 0 0 0 5.135 9.25h6.115a.75.75 0 0 1 0 1.5H5.135a1.5 1.5 0 0 0-1.442 1.086l-1.414 4.926a.75.75 0 0 0 .826.95 28.897 28.897 0 0 0 15.293-7.154.75.75 0 0 0 0-1.115A28.897 28.897 0 0 0 3.105 2.288Z" />
                 </svg>
-                Sotuvchi bilan bog&apos;lanish
+                Xabar
               </Link>
             </div>
           </div>

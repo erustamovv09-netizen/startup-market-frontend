@@ -29,6 +29,7 @@ function ChatClient() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [sendError, setSendError]   = useState("");
   const [myUserId, setMyUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -105,6 +106,8 @@ function ChatClient() {
     const token = localStorage.getItem("access");
     if (!token) return;
 
+    setSendError("");
+
     try {
       const res = await fetch("http://127.0.0.1:8000/api/messages/", {
         method: "POST",
@@ -123,9 +126,23 @@ function ChatClient() {
         const data: Message = await res.json();
         setMessages((prev) => [...prev, data]);
         setNewMessage("");
+        setSendError("");
+      } else if (res.status === 400) {
+        // Backend tomonidan validatsiya xatosi (masalan, haqoratli so'z)
+        const errData = await res.json();
+        const msg =
+          errData?.non_field_errors?.[0] ||
+          errData?.content?.[0]          ||
+          errData?.text?.[0]             ||
+          errData?.detail                ||
+          "Xabar yuborishda xatolik yuz berdi.";
+        setSendError(msg);
+      } else {
+        setSendError("Xabar yuborilmadi. Qayta urinib ko'ring.");
       }
     } catch (error) {
       console.error(error);
+      setSendError("Tarmoq xatosi. Internet aloqasini tekshiring.");
     }
   }
 
@@ -230,13 +247,27 @@ function ChatClient() {
 
       {/* ── Xabar Yozish Qismi ── */}
       <div className="shrink-0 bg-zinc-100 p-3 dark:bg-zinc-900 sm:mb-6 sm:rounded-b-2xl sm:border-x sm:border-b sm:border-zinc-200 sm:p-4 sm:dark:border-zinc-800">
+        {/* ── Xato xabari (backend 400) ── */}
+        {sendError && (
+          <div className="mb-2 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 dark:border-red-800/50 dark:bg-red-950/40">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="mt-0.5 h-4 w-4 shrink-0 text-red-500">
+              <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
+            </svg>
+            <p className="text-sm font-medium text-red-700 dark:text-red-400">{sendError}</p>
+          </div>
+        )}
         <form onSubmit={sendMessage} className="flex items-end gap-2">
           <textarea
             rows={1}
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e) => {
+              setNewMessage(e.target.value);
+              if (sendError) setSendError("");
+            }}
             placeholder="Xabar yozing..."
-            className="max-h-32 min-h-[48px] flex-1 resize-none rounded-2xl border-none bg-white px-5 py-3 text-[15px] text-zinc-900 shadow-sm placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-500"
+            className={`max-h-32 min-h-[48px] flex-1 resize-none rounded-2xl border-none bg-white px-5 py-3 text-[15px] text-zinc-900 shadow-sm placeholder-zinc-400 focus:outline-none focus:ring-2 ${
+              sendError ? "ring-2 ring-red-400" : "focus:ring-indigo-500"
+            } dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-500`}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();

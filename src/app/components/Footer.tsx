@@ -169,21 +169,7 @@ export default function Footer() {
               ))}
             </ul>
 
-            {/* Telegram CTA */}
-            <div className="mt-6 rounded-xl border border-indigo-100 bg-indigo-50/60 p-4 dark:border-indigo-900/40 dark:bg-indigo-950/30">
-              <p className="mb-2 text-xs font-semibold text-indigo-700 dark:text-indigo-300">
-                📣 Yangiliklardan xabardor bo&apos;ling
-              </p>
-              <a
-                href="https://t.me/startupmarket_uz"
-                target="_blank"
-                rel="noopener noreferrer"
-                id="footer-tg-cta"
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 hover:underline dark:text-indigo-400"
-              >
-                Telegram kanaliga qo&apos;shiling →
-              </a>
-            </div>
+
           </div>
         </div>
       </div>
