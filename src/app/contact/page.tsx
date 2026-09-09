@@ -3,16 +3,44 @@
 import React, { useState } from "react";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData]     = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess]   = useState(false);
+  const [error, setError]           = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    if (error) setError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/contact/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setIsSuccess(true);
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        const data = await res.json().catch(() => null);
+        const msg =
+          data?.detail ||
+          data?.non_field_errors?.[0] ||
+          "Xabar yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.";
+        setError(msg);
+      }
+    } catch {
+      setError("Tarmoq xatosi. Internet aloqasini tekshiring.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contacts = [
@@ -125,7 +153,21 @@ export default function ContactPage() {
 
             {/* ── O'ng ustun: Aloqa formasi ── */}
             <div>
-              {submitted ? (
+              {isSuccess ? (
+                <div className="flex h-full flex-col items-center justify-center rounded-2xl bg-green-50 p-10 text-center dark:bg-green-950/30 border border-green-200 dark:border-green-900/50">
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/50">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-8 w-8 text-green-600 dark:text-green-400">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-green-800 dark:text-green-300 mb-2">
+                    Xabaringiz yuborildi!
+                  </h3>
+                  <p className="text-green-700 dark:text-green-400">
+                    Tez orada siz bilan bog&apos;lanamiz.
+                  </p>
+                </div>
+              ) : isSuccess ? (
                 <div className="flex h-full flex-col items-center justify-center rounded-2xl bg-green-50 p-10 text-center dark:bg-green-950/30 border border-green-200 dark:border-green-900/50">
                   <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/50">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-8 w-8 text-green-600 dark:text-green-400">
@@ -189,11 +231,32 @@ export default function ContactPage() {
                     />
                   </div>
 
+                  {/* Xato xabari */}
+                  {error && (
+                    <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-800/50 dark:bg-red-950/40">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="mt-0.5 h-4 w-4 shrink-0 text-red-500">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm font-medium text-red-700 dark:text-red-400">{error}</p>
+                    </div>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3.5 text-center text-sm font-bold text-white shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:from-indigo-500 hover:to-purple-500 hover:shadow-indigo-500/50 hover:-translate-y-0.5 active:translate-y-0"
+                    disabled={isSubmitting}
+                    className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3.5 text-center text-sm font-bold text-white shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:from-indigo-500 hover:to-purple-500 hover:shadow-indigo-500/50 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   >
-                    ✉️ &nbsp;Xabar yuborish
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <svg className="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        Yuborilmoqda...
+                      </span>
+                    ) : (
+                      "✉️ \u00a0Xabar yuborish"
+                    )}
                   </button>
                 </form>
               )}
