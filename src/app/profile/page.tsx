@@ -22,6 +22,7 @@ interface MyStartup {
   price: string;
   project_type_display: string;
   is_premium: boolean;
+  is_sold: boolean;
   created_at: string;
 }
 
@@ -112,6 +113,35 @@ export default function ProfilePage() {
         setMyStartups(myStartups.filter((s) => s.id !== id));
       } else {
         alert("O'chirishda xatolik yuz berdi.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // ── Sotildi deb belgilash ───────────────────────────────────────────────────
+
+  async function markAsSold(id: number) {
+    if (!confirm("Ushbu e'lonni 'Sotildi' deb belgilamoqchimisiz?")) return;
+    
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/startups/${id}/`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ is_sold: true }),
+      });
+
+      if (res.ok) {
+        setMyStartups(myStartups.map((s) => (s.id === id ? { ...s, is_sold: true } : s)));
+        alert("E'lon muvaffaqiyatli 'Sotildi' deb belgilandi!");
+      } else {
+        alert("Xatolik yuz berdi.");
       }
     } catch (error) {
       console.error(error);
@@ -423,6 +453,14 @@ export default function ProfilePage() {
                           >
                             Ko&apos;rish
                           </Link>
+                          {!s.is_sold && (
+                            <button
+                              onClick={() => markAsSold(s.id)}
+                              className="inline-flex items-center justify-center rounded-md border border-green-300 bg-gradient-to-r from-green-400 to-emerald-600 px-2 py-1 text-xs font-medium text-white transition hover:from-green-500 hover:to-emerald-700"
+                            >
+                              Sotildi
+                            </button>
+                          )}
                           <button
                             onClick={() => router.push(`/edit/${s.id}`)}
                             className="inline-flex items-center justify-center rounded-md border border-yellow-300 bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"

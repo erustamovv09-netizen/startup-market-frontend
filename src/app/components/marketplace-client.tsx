@@ -19,6 +19,7 @@ export interface Startup {
   play_store_link?: string | null;
   app_store_link?: string | null;
   is_premium: boolean;
+  is_sold: boolean;
   created_at: string;
   owner_info: { id: number; username: string; email: string };
 }
@@ -77,8 +78,23 @@ function StartupCard({ s }: { s: Startup }) {
       className="group relative flex flex-col rounded-2xl border border-zinc-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/8 dark:border-zinc-800/80 dark:bg-zinc-900 dark:hover:border-indigo-800"
     >
       {/* Premium banner */}
-      {s.is_premium && (
+      {s.is_premium && !s.is_sold && (
         <div className="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500" />
+      )}
+
+      {/* Sotildi banner (yuqori chiziq) */}
+      {s.is_sold && (
+        <div className="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-red-500 to-rose-600" />
+      )}
+
+      {/* Sotildi badge (absolyut, yuqori-o'ng) */}
+      {s.is_sold && (
+        <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-500 to-rose-600 px-3 py-1 text-xs font-bold text-white shadow-lg shadow-red-500/30">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-3 w-3">
+            <path fillRule="evenodd" d="M4.5 1A1.5 1.5 0 0 0 3 2.5V3H2a1 1 0 0 0 0 2h.026l.432 7.772A2 2 0 0 0 4.455 14.5h7.09a2 2 0 0 0 1.997-1.728L13.974 5H14a1 1 0 1 0 0-2h-1v-.5A1.5 1.5 0 0 0 11.5 1h-7Zm0 1.5h7V3h-7v-.5Zm-.457 3h7.914l-.406 7.3a.5.5 0 0 1-.499.45h-7.09a.5.5 0 0 1-.499-.45L4.043 5.5Z" clipRule="evenodd" />
+          </svg>
+          Sotildi
+        </div>
       )}
 
       <div className="flex flex-1 flex-col p-5">
@@ -182,14 +198,31 @@ function StartupCard({ s }: { s: Startup }) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
-          <span className="text-lg font-bold text-zinc-900 dark:text-white">
-            {formatPrice(s.price)}
-          </span>
+        <div className={`flex items-center justify-between gap-2 border-t pt-4 ${
+          s.is_sold
+            ? "border-red-100 dark:border-red-900/30"
+            : "border-zinc-100 dark:border-zinc-800"
+        }`}>
+          {s.is_sold ? (
+            <span className="inline-flex items-center gap-1.5 text-sm font-bold text-red-500 dark:text-red-400">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+                <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v4.59L7.3 9.24a.75.75 0 0 0-1.1 1.02l3.25 3.5a.75.75 0 0 0 1.1 0l3.25-3.5a.75.75 0 1 0-1.1-1.02l-1.95 2.1V6.75Z" clipRule="evenodd" />
+              </svg>
+              Sotildi
+            </span>
+          ) : (
+            <span className="text-lg font-bold text-zinc-900 dark:text-white">
+              {formatPrice(s.price)}
+            </span>
+          )}
           <Link
             href={`/startups/${s.id}`}
             id={`startup-details-${s.id}`}
-            className="inline-flex h-8 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-xs font-medium text-zinc-700 transition-all hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:border-indigo-600 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-300"
+            className={`inline-flex h-8 items-center justify-center rounded-lg border px-3 text-xs font-medium transition-all ${
+              s.is_sold
+                ? "border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-900/50"
+                : "border-zinc-200 bg-zinc-50 text-zinc-700 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:border-indigo-600 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-300"
+            }`}
           >
             Batafsil →
           </Link>

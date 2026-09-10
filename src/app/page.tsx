@@ -146,21 +146,58 @@ export default function Home() {
         {/* ── Stats strip ── */}
         <div className="relative border-t border-zinc-100 bg-gradient-to-r from-zinc-50 via-white to-zinc-50 dark:border-zinc-800 dark:from-zinc-900/60 dark:via-zinc-950 dark:to-zinc-900/60">
           <div className="mx-auto grid max-w-7xl grid-cols-3 divide-x divide-zinc-200 dark:divide-zinc-800">
-            {[
-              { label: "Faol e'lonlar",          value: `${startups.length}+`,      icon: "📋" },
-              { label: "Muvaffaqiyatli savdolar", value: "85+",                     icon: "🤝" },
-              { label: "Ro'yxatdan o'tgan",       value: "500+",                    icon: "👥" },
-            ].map((stat) => (
-              <div key={stat.label} className="px-4 py-4 text-center sm:px-8">
-                <div className="mb-1 text-xl">{stat.icon}</div>
-                <p className="text-2xl font-bold text-zinc-900 dark:text-white">
-                  {stat.value}
+
+            {/* 1 — Dinamik faol e'lonlar soni */}
+            <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center sm:flex-row sm:gap-4 sm:px-8 sm:text-left">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                  <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm2.25 8.5a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Zm0 3a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-2xl font-extrabold text-zinc-900 dark:text-white">
+                  {startups.length} ta
                 </p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {stat.label}
+                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  Faol e&apos;lonlar
                 </p>
               </div>
-            ))}
+            </div>
+
+            {/* 2 — 100% Ochiq */}
+            <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center sm:flex-row sm:gap-4 sm:px-8 sm:text-left">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                  <path fillRule="evenodd" d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-2xl font-extrabold text-zinc-900 dark:text-white">
+                  100% Ochiq
+                </p>
+                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  Vositachilarsiz to&apos;g&apos;ridan-to&apos;g&apos;ri muloqot
+                </p>
+              </div>
+            </div>
+
+            {/* 3 — 0% Komissiya */}
+            <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center sm:flex-row sm:gap-4 sm:px-8 sm:text-left">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM6.75 9.25a.75.75 0 0 0 0 1.5h4.59l-2.1 1.95a.75.75 0 0 0 1.02 1.1l3.5-3.25a.75.75 0 0 0 0-1.1l-3.5-3.25a.75.75 0 1 0-1.02 1.1l2.1 1.95H6.75Z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-2xl font-extrabold text-zinc-900 dark:text-white">
+                  0% Komissiya
+                </p>
+                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  Sotuv va xaridlar uchun yashirin to&apos;lovlar yo&apos;q
+                </p>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
