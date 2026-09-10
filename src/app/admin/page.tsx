@@ -39,6 +39,13 @@ interface Startup {
   };
 }
 
+interface StatsData {
+  total_users: number;
+  new_users_this_month: number;
+  total_sold: number;
+  sold_this_month: number;
+}
+
 type NavItem = {
   id: string;
   label: string;
@@ -80,6 +87,7 @@ export default function AdminPage() {
   
   const [users, setUsers]         = useState<AdminUser[]>([]);
   const [startups, setStartups]   = useState<Startup[]>([]);
+  const [stats, setStats]         = useState<StatsData | null>(null);
   
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -115,6 +123,14 @@ export default function AdminPage() {
         });
         if (startupsRes.ok) {
           setStartups(await startupsRes.json());
+        }
+
+        // Fetch stats
+        const statsRes = await fetch("http://127.0.0.1:8000/api/admin/stats/", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (statsRes.ok) {
+          setStats(await statsRes.json());
         }
       } catch {
         router.replace("/");
@@ -396,6 +412,69 @@ export default function AdminPage() {
       case "startups":
         return (
           <div>
+            {/* Analytics Grid */}
+            <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {/* Card 1 */}
+              <div className="rounded-2xl border-l-4 border-indigo-500 bg-white p-6 shadow-lg shadow-zinc-200/50 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none dark:border-l-indigo-500">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6">
+                      <path d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16Z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Umumiy foydalanuvchilar</p>
+                    <p className="text-2xl font-bold text-zinc-900 dark:text-white">{stats?.total_users || 0}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2 */}
+              <div className="rounded-2xl border-l-4 border-emerald-500 bg-white p-6 shadow-lg shadow-zinc-200/50 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none dark:border-l-emerald-500">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6">
+                      <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM2.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 8 18a9.953 9.953 0 0 1-5.385-1.572ZM16.25 5.75a.75.75 0 0 0-1.5 0v2h-2a.75.75 0 0 0 0 1.5h2v2a.75.75 0 0 0 1.5 0v-2h2a.75.75 0 0 0 0-1.5h-2v-2Z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Shu oy ro&apos;yxatdan o&apos;tganlar</p>
+                    <p className="text-2xl font-bold text-zinc-900 dark:text-white">{stats?.new_users_this_month || 0}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3 */}
+              <div className="rounded-2xl border-l-4 border-amber-500 bg-white p-6 shadow-lg shadow-zinc-200/50 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none dark:border-l-amber-500">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v4.59L7.3 9.24a.75.75 0 0 0-1.1 1.02l3.25 3.5a.75.75 0 0 0 1.1 0l3.25-3.5a.75.75 0 1 0-1.1-1.02l-1.95 2.1V6.75Z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Umumiy muvaffaqiyatli savdolar</p>
+                    <p className="text-2xl font-bold text-zinc-900 dark:text-white">{stats?.total_sold || 0}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 4 */}
+              <div className="rounded-2xl border-l-4 border-rose-500 bg-white p-6 shadow-lg shadow-zinc-200/50 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none dark:border-l-rose-500">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6">
+                      <path fillRule="evenodd" d="M1 4.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1-.75-.75ZM1 9.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1-.75-.75ZM1.75 13.5a.75.75 0 0 0 0 1.5h16.5a.75.75 0 0 0 0-1.5H1.75Z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Shu oy sotilganlar</p>
+                    <p className="text-2xl font-bold text-zinc-900 dark:text-white">{stats?.sold_this_month || 0}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-xl font-bold text-zinc-900 dark:text-white">E&apos;lonlar</h2>

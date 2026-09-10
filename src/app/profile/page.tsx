@@ -148,6 +148,16 @@ export default function ProfilePage() {
     }
   }
 
+  // ── Vaqt tekshiruvi ─────────────────────────────────────────────────────────
+
+  const isEditable = (createdAt: string) => {
+    if (!createdAt) return false;
+    const createdTime = new Date(createdAt).getTime();
+    const currentTime = new Date().getTime();
+    const diffInMinutes = (currentTime - createdTime) / (1000 * 60);
+    return diffInMinutes <= 15;
+  };
+
   // ── Chiqish ────────────────────────────────────────────────────────────────
 
   function handleLogout() {
@@ -465,12 +475,14 @@ export default function ProfilePage() {
                               Sotilgan 🔒
                             </span>
                           )}
-                          <button
-                            onClick={() => router.push(`/edit/${s.id}`)}
-                            className="inline-flex items-center justify-center rounded-md border border-yellow-300 bg-yellow-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"
-                          >
-                            ✏️ Tahrir
-                          </button>
+                          {isEditable(s.created_at) && (
+                            <button
+                              onClick={() => router.push(`/edit/${s.id}`)}
+                              className="inline-flex items-center justify-center rounded-md border border-yellow-300 bg-yellow-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"
+                            >
+                              ✏️ Tahrir
+                            </button>
+                          )}
                           <button
                             onClick={() => deleteMyStartup(s.id)}
                             className="inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-900/50"
