@@ -33,6 +33,7 @@ interface Startup {
   price: string;
   project_type_display: string;
   is_premium?: boolean;
+  is_sold?: boolean;
   owner_info: {
     username: string;
   };
@@ -171,6 +172,35 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error("Premium holatini o'zgartirishda xatolik:", error);
+    }
+  }
+
+  // ── Startup sotilgan holatini o'zgartirish ─────────────────────────────────
+  async function toggleSoldStatus(startupId: number, currentStatus: boolean | undefined) {
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
+    if (!confirm(currentStatus ? "Sotilgan holatini bekor qilmoqchimisiz?" : "Sotildi deb belgilamoqchimisiz?")) return;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/startups/${startupId}/`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ is_sold: !currentStatus }),
+      });
+
+      if (res.ok) {
+        setStartups(startups.map((s) => 
+          s.id === startupId ? { ...s, is_sold: !currentStatus } : s
+        ));
+      } else {
+        alert("Sotilgan holatini o'zgartirishda xatolik yuz berdi.");
+      }
+    } catch (error) {
+      console.error("Sotilgan holatini o'zgartirishda xatolik:", error);
     }
   }
 
@@ -417,6 +447,17 @@ export default function AdminPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => toggleSoldStatus(s.id, s.is_sold)}
+                              className={`font-medium ${
+                                s.is_sold
+                                  ? "text-orange-600 hover:text-orange-700 dark:text-orange-500 dark:hover:text-orange-400"
+                                  : "text-emerald-600 hover:text-emerald-700 dark:text-emerald-500 dark:hover:text-emerald-400"
+                              }`}
+                            >
+                              {s.is_sold ? "Ortga qaytarish" : "Sotildi qilish"}
+                            </button>
                             <button
                               type="button"
                               onClick={() => togglePremium(s.id)}

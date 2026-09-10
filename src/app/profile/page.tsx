@@ -442,34 +442,38 @@ export default function ProfilePage() {
                         {s.description}
                       </p>
 
-                      <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-700/50">
-                        <span className="font-bold text-zinc-900 dark:text-white">
+                      <div className="mt-auto flex flex-col gap-3 border-t border-zinc-100 pt-4 dark:border-zinc-700/50">
+                        <span className="font-bold text-lg text-zinc-900 dark:text-white">
                           ${s.price}
                         </span>
-                        <div className="flex gap-2">
+                        <div className="grid grid-cols-2 gap-2 xl:flex xl:flex-wrap">
                           <Link
                             href={`/startups/${s.id}`}
-                            className="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600/80"
+                            className="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs sm:text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600/80"
                           >
                             Ko&apos;rish
                           </Link>
-                          {!s.is_sold && (
+                          {!s.is_sold ? (
                             <button
                               onClick={() => markAsSold(s.id)}
-                              className="inline-flex items-center justify-center rounded-md border border-green-300 bg-gradient-to-r from-green-400 to-emerald-600 px-2 py-1 text-xs font-medium text-white transition hover:from-green-500 hover:to-emerald-700"
+                              className="inline-flex items-center justify-center rounded-md border border-green-300 bg-gradient-to-r from-green-400 to-emerald-600 px-3 py-1.5 text-xs sm:text-sm font-medium text-white transition hover:from-green-500 hover:to-emerald-700"
                             >
                               Sotildi
                             </button>
+                          ) : (
+                            <span className="inline-flex items-center justify-center rounded-md border border-zinc-200 bg-zinc-100 px-3 py-1.5 text-xs sm:text-sm font-medium text-zinc-500 cursor-not-allowed dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+                              Sotilgan 🔒
+                            </span>
                           )}
                           <button
                             onClick={() => router.push(`/edit/${s.id}`)}
-                            className="inline-flex items-center justify-center rounded-md border border-yellow-300 bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"
+                            className="inline-flex items-center justify-center rounded-md border border-yellow-300 bg-yellow-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-yellow-700 transition hover:bg-yellow-100 dark:border-yellow-700/50 dark:bg-yellow-950/30 dark:text-yellow-400 dark:hover:bg-yellow-900/50"
                           >
-                            ✏️ Tahrirlash
+                            ✏️ Tahrir
                           </button>
                           <button
                             onClick={() => deleteMyStartup(s.id)}
-                            className="inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-900/50"
+                            className="inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-900/50"
                           >
                             O&apos;chirish
                           </button>
