@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -50,13 +51,13 @@ export default function ProfilePage() {
     async function fetchProfile() {
       try {
         const [profileRes, startupsRes] = await Promise.all([
-          fetch("http://127.0.0.1:8000/api/profile/", {
+          fetch(`${API_BASE_URL}/api/profile/`, {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
           }),
-          fetch("http://127.0.0.1:8000/api/my-startups/", {
+          fetch(`${API_BASE_URL}/api/my-startups/`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -67,7 +68,8 @@ export default function ProfilePage() {
           // Token eskirgan — login sahifasiga yo'naltirish
           localStorage.removeItem("access");
           localStorage.removeItem("refresh");
-          router.replace("/login");
+          document.cookie = "access=; path=/; max-age=0; SameSite=Lax";
+          router.push("/login");
           return;
         }
 
@@ -102,7 +104,7 @@ export default function ProfilePage() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/my-startups/${id}/delete/`, {
+      const res = await fetch(`${API_BASE_URL}/api/my-startups/${id}/delete/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -128,7 +130,7 @@ export default function ProfilePage() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/startups/${id}/`, {
+      const res = await fetch(`${API_BASE_URL}/api/startups/${id}/`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -163,7 +165,8 @@ export default function ProfilePage() {
   function handleLogout() {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
-    window.location.href = "/";
+    document.cookie = "access=; path=/; max-age=0; SameSite=Lax";
+    router.push("/login");
   }
 
   // ── Avatar harfi ──────────────────────────────────────────────────────────

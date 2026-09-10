@@ -68,7 +68,7 @@ const TYPE_BADGE: Record<string, string> = {
 
 // ─── Startup kartasi ──────────────────────────────────────────────────────────
 
-function StartupCard({ s }: { s: Startup }) {
+export function StartupCard({ s }: { s: Startup }) {
   const techList = s.tech_stack.split(",").map((t) => t.trim()).filter(Boolean);
   const badge = TYPE_BADGE[s.project_type] ?? TYPE_BADGE.other;
 

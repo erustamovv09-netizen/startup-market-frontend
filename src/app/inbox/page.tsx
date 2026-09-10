@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -53,13 +54,13 @@ export default function InboxPage() {
     async function fetchData() {
       try {
         const [profileRes, messagesRes, startupsRes] = await Promise.all([
-          fetch("http://127.0.0.1:8000/api/profile/", {
+          fetch(`${API_BASE_URL}/api/profile/`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("http://127.0.0.1:8000/api/messages/", {
+          fetch(`${API_BASE_URL}/api/messages/`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("http://127.0.0.1:8000/api/startups/"), // Startuplar ro'yxati ochiq (token kerak emas yoki bo'lsa yaxshi)
+          fetch(`${API_BASE_URL}/api/startups/`), // Startuplar ro'yxati ochiq (token kerak emas yoki bo'lsa yaxshi)
         ]);
 
         if (profileRes.status === 401) {

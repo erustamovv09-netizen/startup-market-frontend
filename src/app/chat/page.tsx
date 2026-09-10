@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -51,7 +52,7 @@ function ChatClient() {
     async function fetchData() {
       try {
         // 1. Profilni olish (myUserId ni bilish uchun)
-        const profileRes = await fetch("http://127.0.0.1:8000/api/profile/", {
+        const profileRes = await fetch(`${API_BASE_URL}/api/profile/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -70,7 +71,7 @@ function ChatClient() {
         }
 
         // 2. Xabarlarni olish
-        const msgRes = await fetch("http://127.0.0.1:8000/api/messages/", {
+        const msgRes = await fetch(`${API_BASE_URL}/api/messages/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -109,7 +110,7 @@ function ChatClient() {
     setSendError("");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/messages/", {
+      const res = await fetch(`${API_BASE_URL}/api/messages/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

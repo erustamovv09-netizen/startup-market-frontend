@@ -1,7 +1,9 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface UserInfo {
   is_staff: boolean;
@@ -12,23 +14,33 @@ export default function AuthButtons() {
   const [isStaff, setIsStaff]       = useState(false);
   const [mounted, setMounted]       = useState(false);
 
+  const pathname = usePathname();
+
   useEffect(() => {
     setMounted(true);
     const token = localStorage.getItem("access");
-    if (!token) return;
+    if (!token) {
+      setIsLoggedIn(false);
+      setIsStaff(false);
+      return;
+    }
 
     setIsLoggedIn(true);
 
     // is_staff ni API dan olish (background — UI ni bloklamaydi)
-    fetch("http://127.0.0.1:8000/api/profile/", {
+    fetch(`${API_BASE_URL}/api/profile/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : null))
       .then((data: UserInfo | null) => {
-        if (data?.is_staff) setIsStaff(true);
+        if (data?.is_staff) {
+          setIsStaff(true);
+        } else {
+          setIsStaff(false);
+        }
       })
       .catch(() => {}); // xato bo'lsa jim o'tamiz
-  }, []);
+  }, [pathname]);
 
   // Hydration mismatch oldini olish
   if (!mounted) {

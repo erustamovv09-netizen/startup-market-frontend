@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -38,7 +39,7 @@ export default function EditStartupPage() {
     async function fetchStartup() {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/api/my-startups/${params.id}/edit/`,
+          `${API_BASE_URL}/api/my-startups/${params.id}/edit/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -140,7 +141,7 @@ export default function EditStartupPage() {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/my-startups/${params.id}/edit/`,
+        `${API_BASE_URL}/api/my-startups/${params.id}/edit/`,
         {
           method: "PATCH",
           headers: {

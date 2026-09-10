@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/api";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -37,7 +38,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/startups/${id}/`, {
+    const res = await fetch(`${API_BASE_URL}/api/startups/${id}/`, {
       cache: "no-store",
     });
     if (!res.ok) return { title: "Startup topilmadi" };
@@ -102,7 +103,7 @@ export default async function StartupDetailPage({ params }: Props) {
   // Django dan bitta startup olish
   let startup: Startup;
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/startups/${id}/`, {
+    const res = await fetch(`${API_BASE_URL}/api/startups/${id}/`, {
       cache: "no-store",
     });
     if (res.status === 404) notFound();
@@ -394,7 +395,7 @@ export default async function StartupDetailPage({ params }: Props) {
               Boshqa e&apos;lonlar
             </h2>
             <Link
-              href="/"
+              href="/startups"
               id="more-listings-link"
               className="text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
             >

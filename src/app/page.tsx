@@ -1,8 +1,10 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import MarketplaceClient, { type Startup } from "./components/marketplace-client";
+import Link from "next/link";
+import { StartupCard, type Startup } from "./components/marketplace-client";
 
 // ─── Asosiy sahifa (Himoyalangan Client Component) ─────────────────────────
 
@@ -26,7 +28,7 @@ export default function Home() {
     // 2. Startaplarni yuklash
     async function fetchStartups() {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/startups/", {
+        const res = await fetch(`${API_BASE_URL}/api/startups/`, {
           cache: "no-store",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -129,8 +131,8 @@ export default function Home() {
 
             {/* CTA tugma */}
             <div className="flex items-center justify-center">
-              <a
-                href="#listings"
+              <Link
+                href="/startups"
                 id="hero-browse-btn"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:opacity-90 hover:shadow-xl hover:shadow-indigo-500/40 active:scale-95"
               >
@@ -138,7 +140,7 @@ export default function Home() {
                   <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clipRule="evenodd" />
                 </svg>
                 Startaplarni ko&apos;rish
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -218,8 +220,29 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Client komponent — qidiruv + filtr + grid */}
-        <MarketplaceClient startups={startups} />
+        {/* So'nggi 6 ta startap */}
+        <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+          {startups.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {startups.slice(0, 6).map((startup) => (
+                <StartupCard key={startup.id} s={startup} />
+              ))}
+            </div>
+          ) : (
+            <div className="py-20 text-center text-zinc-500">
+              Hozircha e&apos;lonlar mavjud emas
+            </div>
+          )}
+
+          {/* Barcha e'lonlarni ko'rish tugmasi */}
+          {startups.length > 6 && (
+            <div className="mt-12 flex justify-center w-full">
+              <Link href="/startups" className="inline-flex items-center gap-2 px-8 py-3 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                Barcha e&apos;lonlarni ko&apos;rish <span aria-hidden="true">&rarr;</span>
+              </Link>
+            </div>
+          )}
+        </div>
       </section>
 
     </div>

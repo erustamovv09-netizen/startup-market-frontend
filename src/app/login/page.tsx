@@ -1,8 +1,10 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, type FormEvent, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Suspense } from "react";
 
 // ─── Turlar ───────────────────────────────────────────────────────────────────
@@ -24,6 +26,7 @@ function LoginForm() {
   const searchParams = useSearchParams();
 
   const justRegistered = searchParams.get("registered") === "true";
+  const loginRequired  = searchParams.get("error") === "login_required";
 
   const [formData, setFormData] = useState<FormData>({ username: "", password: "" });
   const [fieldErrors, setFieldErrors]   = useState<FieldErrors>({});
@@ -62,7 +65,7 @@ function LoginForm() {
     setServerError("");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/login/", {
+      const res = await fetch(`${API_BASE_URL}/api/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -76,6 +79,9 @@ function LoginForm() {
         // JWT tokenlarni localStorage ga saqlash
         localStorage.setItem("access",  data.access);
         localStorage.setItem("refresh", data.refresh);
+        // Middleware o'qiy olishi uchun cookie'ga ham saqlaymiz
+        document.cookie = `access=${data.access}; path=/; max-age=86400; SameSite=Lax`;
+        
         // Bosh sahifaga yo'naltirish
         router.push("/");
         router.refresh(); // server komponentlarni yangilash uchun
@@ -122,6 +128,18 @@ function LoginForm() {
             </svg>
             <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
               Ro&apos;yxatdan muvaffaqiyatli o&apos;tdingiz! Endi kiring.
+            </p>
+          </div>
+        )}
+
+        {/* Majburiy avtorizatsiya xabari (Middleware dan) */}
+        {loginRequired && (
+          <div className="mb-4 flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800/60 dark:bg-amber-950/40">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" className="h-4 w-4 shrink-0 text-amber-600">
+              <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
+            </svg>
+            <p className="text-sm font-medium text-amber-800 dark:text-amber-400">
+              Platformadan to&apos;liq foydalanish uchun avval ro&apos;yxatdan o&apos;ting yoki tizimga kiring.
             </p>
           </div>
         )}
@@ -271,19 +289,22 @@ function LoginForm() {
               <div className="h-px flex-1 bg-zinc-200 dark:bg-zinc-700" />
             </div>
 
-            {/* Telegram orqali kirish (placeholder) */}
-            <a
-              href="https://t.me/startupmarket_uz"
-              target="_blank"
-              rel="noopener noreferrer"
-              id="login-telegram-btn"
-              className="inline-flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-200 bg-zinc-50 text-sm font-medium text-zinc-700 transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:border-sky-700 dark:hover:bg-sky-950/30 dark:hover:text-sky-400"
+            {/* Google orqali kirish */}
+            <button
+              type="button"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+              id="login-google-btn"
+              className="inline-flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-200 bg-white text-sm font-medium text-zinc-700 transition-all hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-750 shadow-sm"
             >
-              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" className="h-[18px] w-[18px] shrink-0 text-sky-500">
-                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18px" height="18px">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.73 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                <path fill="none" d="M0 0h48v48H0z"/>
               </svg>
-              Telegram orqali bog&apos;lanish
-            </a>
+              Google orqali kirish
+            </button>
 
             {/* Ro'yxatdan o'tish havolasi */}
             <p className="mt-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
