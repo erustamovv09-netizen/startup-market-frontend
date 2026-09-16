@@ -15,6 +15,7 @@ export default function StartupsPage() {
   useEffect(() => {
     // 1. Auth tekshirish
     const token = localStorage.getItem("access");
+
     if (!token) {
       router.push("/login");
       return;
@@ -23,12 +24,12 @@ export default function StartupsPage() {
     setIsAuthChecking(false);
 
     // 2. Startaplarni yuklash
-    async function fetchStartups() {
+    async function fetchStartups(activeToken: string) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/startups/`, {
           cache: "no-store",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${activeToken}`,
           },
         });
         
@@ -52,7 +53,7 @@ export default function StartupsPage() {
       }
     }
 
-    fetchStartups();
+    fetchStartups(token);
   }, [router]);
 
   if (isAuthChecking || isLoading) {
