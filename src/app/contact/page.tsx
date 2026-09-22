@@ -4,10 +4,10 @@ import { API_BASE_URL } from "@/lib/api";
 import React, { useState } from "react";
 
 export default function ContactPage() {
-  const [formData, setFormData]     = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess]   = useState(false);
-  const [error, setError]           = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -195,7 +195,7 @@ export default function ContactPage() {
                       required
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="Masalan: Rustam Yusupov"
+                      placeholder="Masalan: Elshod Rustamov"
                       className="block w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-500 dark:focus:border-indigo-400 dark:focus:bg-zinc-800"
                     />
                   </div>

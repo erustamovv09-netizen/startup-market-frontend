@@ -220,7 +220,7 @@ export default function ProfilePage() {
         className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-indigo-50/60 to-transparent dark:from-indigo-950/20 dark:to-transparent"
       />
 
-      <div className="relative mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-5xl px-4 py-3 md:py-10 sm:px-6 lg:px-8">
 
         {/* Orqaga havolasi */}
         <Link
@@ -243,7 +243,7 @@ export default function ProfilePage() {
         {/* ── Sahifa sarlavhasi ── */}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-3xl">
+            <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-3xl">
               Profilim
             </h1>
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
@@ -255,7 +255,7 @@ export default function ProfilePage() {
             id="profile-logout-top"
             type="button"
             onClick={() => setLogoutModal(true)}
-            className="inline-flex h-9 items-center justify-center gap-1.5 self-start rounded-lg border border-red-200 bg-red-50 px-4 text-sm font-semibold text-red-600 transition-all hover:border-red-300 hover:bg-red-100 active:scale-95 dark:border-red-800/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50 sm:self-auto"
+            className="inline-flex h-8 md:h-9 items-center justify-center gap-1.5 self-start rounded-lg border border-red-200 bg-red-50 px-3 md:px-4 text-xs md:text-sm font-semibold text-red-600 transition-all hover:border-red-300 hover:bg-red-100 active:scale-95 dark:border-red-800/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50 sm:self-auto"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -272,19 +272,19 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-3">
 
           {/* ── Chap ustun: Avatar + Asosiy info ── */}
           <div className="lg:col-span-1">
             <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
 
               {/* Gradient banner */}
-              <div className="h-20 bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600" />
+              <div className="h-16 md:h-20 bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600" />
 
-              <div className="-mt-10 px-5 pb-6">
+              <div className="-mt-8 md:-mt-10 px-3 pb-3 md:px-5 md:pb-6">
                 <div className="mb-4 flex items-end justify-between">
                   {/* Avatar */}
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-gradient-to-br from-indigo-500 to-violet-600 text-3xl font-black text-white shadow-lg dark:border-zinc-900">
+                  <div className="flex h-16 w-16 md:h-20 md:w-20 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-gradient-to-br from-indigo-500 to-violet-600 text-xl md:text-3xl font-black text-white shadow-lg dark:border-zinc-900">
                     {avatarLetter}
                   </div>
                   <span className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-800/50 dark:bg-emerald-950/40 dark:text-emerald-400">
@@ -295,7 +295,7 @@ export default function ProfilePage() {
 
                 {/* To'liq ism (katta, bold) + username (kichik, kulrang) */}
                 <div className="mb-1">
-                  <h2 className="text-xl font-bold leading-tight text-zinc-900 dark:text-white">
+                  <h2 className="text-lg md:text-xl font-bold leading-tight text-zinc-900 dark:text-white">
                     {user?.first_name?.trim() || user?.username}
                   </h2>
                   <p className="text-sm text-zinc-400 dark:text-zinc-500">
@@ -314,7 +314,7 @@ export default function ProfilePage() {
                 <Link
                   href="/create"
                   id="profile-create-btn"
-                  className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-600 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-95"
+                  className="inline-flex h-8 md:h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-600 text-xs md:text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-95"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -337,7 +337,7 @@ export default function ProfilePage() {
 
             {/* ── Mening ma'lumotlarim ── */}
             <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-              <div className="border-b border-zinc-100 px-6 py-4 dark:border-zinc-800">
+              <div className="border-b border-zinc-100 px-4 py-3 md:px-6 md:py-4 dark:border-zinc-800">
                 <h3 className="font-semibold text-zinc-900 dark:text-white">
                   Mening ma&apos;lumotlarim
                 </h3>
@@ -345,7 +345,7 @@ export default function ProfilePage() {
                   API dan olingan hisob ma&apos;lumotlari
                 </p>
               </div>
-              <div className="divide-y divide-zinc-100 px-6 dark:divide-zinc-800">
+              <div className="divide-y divide-zinc-100 px-4 md:px-6 dark:divide-zinc-800">
                 {[
                   {
                     label: "Foydalanuvchi nomi",

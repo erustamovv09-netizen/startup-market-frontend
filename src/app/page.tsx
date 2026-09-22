@@ -12,32 +12,28 @@ export default function Home() {
   const router = useRouter();
 
   const [isAuthChecking, setIsAuthChecking] = useState(true);
-  const [startups, setStartups]             = useState<Startup[]>([]);
-  const [isLoading, setIsLoading]           = useState(true);
+  const [startups, setStartups] = useState<Startup[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Auth tekshirish (faqat Backend token)
     const token = localStorage.getItem("access");
-
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
     setIsAuthChecking(false);
 
     // 2. Startaplarni yuklash
-    async function fetchStartups(activeToken: string) {
+    async function fetchStartups(activeToken: string | null) {
       try {
+        const headers: HeadersInit = {};
+        if (activeToken) {
+          headers["Authorization"] = `Bearer ${activeToken}`;
+        }
+
         const res = await fetch(`${API_BASE_URL}/api/startups/`, {
           cache: "no-store",
-          headers: {
-            Authorization: `Bearer ${activeToken}`,
-          },
+          headers,
         });
-        
-        if (res.status === 401) {
-          // Token eskirgan yoki xato
+
+        if (res.status === 401 && activeToken) {
+          // Token eskirgan
           localStorage.removeItem("access");
           localStorage.removeItem("refresh");
           router.push("/login");
@@ -151,54 +147,57 @@ export default function Home() {
           <div className="mx-auto grid max-w-7xl grid-cols-3 divide-x divide-zinc-200 dark:divide-zinc-800">
 
             {/* 1 — Dinamik faol e'lonlar soni */}
-            <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center sm:flex-row sm:gap-4 sm:px-8 sm:text-left">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+            <div className="flex flex-col items-center justify-center gap-1 px-2 py-3 text-center md:gap-2 md:px-8 md:py-6">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 md:h-10 md:w-10 dark:bg-indigo-900/30 dark:text-indigo-400">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3 md:h-5 md:w-5">
                   <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm2.25 8.5a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Zm0 3a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Z" clipRule="evenodd" />
                 </svg>
               </div>
-              <div>
-                <p className="text-2xl font-extrabold text-zinc-900 dark:text-white">
-                  {startups.length} ta
-                </p>
-                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  Faol e&apos;lonlar
-                </p>
-              </div>
+              <p className="text-sm font-extrabold leading-tight text-zinc-900 md:text-2xl dark:text-white">
+                {startups.length} ta
+              </p>
+              <p className="hidden text-xs font-medium text-zinc-500 sm:block dark:text-zinc-400">
+                Faol e&apos;lonlar
+              </p>
+              <p className="text-[10px] leading-tight text-zinc-400 sm:hidden dark:text-zinc-500">
+                E&apos;lonlar
+              </p>
             </div>
 
             {/* 2 — 100% Ochiq */}
-            <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center sm:flex-row sm:gap-4 sm:px-8 sm:text-left">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+            <div className="flex flex-col items-center justify-center gap-1 px-2 py-3 text-center md:gap-2 md:px-8 md:py-6">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 md:h-10 md:w-10 dark:bg-emerald-900/30 dark:text-emerald-400">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3 md:h-5 md:w-5">
                   <path fillRule="evenodd" d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z" clipRule="evenodd" />
                 </svg>
               </div>
-              <div>
-                <p className="text-2xl font-extrabold text-zinc-900 dark:text-white">
-                  100% Ochiq
-                </p>
-                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  Vositachilarsiz to&apos;g&apos;ridan-to&apos;g&apos;ri muloqot
-                </p>
-              </div>
+              <p className="text-sm font-extrabold leading-tight text-zinc-900 md:text-2xl dark:text-white">
+                100% Ochiq
+              </p>
+              <p className="hidden text-xs font-medium text-zinc-500 sm:block dark:text-zinc-400">
+                Vositachilarsiz muloqot
+              </p>
+              <p className="text-[10px] leading-tight text-zinc-400 sm:hidden dark:text-zinc-500">
+                To&apos;g&apos;ridan-to&apos;g&apos;ri
+              </p>
             </div>
 
             {/* 3 — 0% Komissiya */}
-            <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center sm:flex-row sm:gap-4 sm:px-8 sm:text-left">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+            <div className="flex flex-col items-center justify-center gap-1 px-2 py-3 text-center md:gap-2 md:px-8 md:py-6">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-purple-50 text-purple-600 md:h-10 md:w-10 dark:bg-purple-900/30 dark:text-purple-400">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3 md:h-5 md:w-5">
                   <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM6.75 9.25a.75.75 0 0 0 0 1.5h4.59l-2.1 1.95a.75.75 0 0 0 1.02 1.1l3.5-3.25a.75.75 0 0 0 0-1.1l-3.5-3.25a.75.75 0 1 0-1.02 1.1l2.1 1.95H6.75Z" clipRule="evenodd" />
                 </svg>
               </div>
-              <div>
-                <p className="text-2xl font-extrabold text-zinc-900 dark:text-white">
-                  0% Komissiya
-                </p>
-                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  Sotuv va xaridlar uchun yashirin to&apos;lovlar yo&apos;q
-                </p>
-              </div>
+              <p className="text-sm font-extrabold leading-tight text-zinc-900 md:text-2xl dark:text-white">
+                0% Komissiya
+              </p>
+              <p className="hidden text-xs font-medium text-zinc-500 sm:block dark:text-zinc-400">
+                Yashirin to&apos;lovlar yo&apos;q
+              </p>
+              <p className="text-[10px] leading-tight text-zinc-400 sm:hidden dark:text-zinc-500">
+                Komissiyasiz
+              </p>
             </div>
 
           </div>
@@ -224,7 +223,7 @@ export default function Home() {
         {/* So'nggi 6 ta startap */}
         <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
           {startups.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {startups.slice(0, 6).map((startup) => (
                 <StartupCard key={startup.id} s={startup} />
               ))}

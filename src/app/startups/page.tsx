@@ -13,27 +13,23 @@ export default function StartupsPage() {
   const [isLoading, setIsLoading]           = useState(true);
 
   useEffect(() => {
-    // 1. Auth tekshirish
     const token = localStorage.getItem("access");
-
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
     setIsAuthChecking(false);
 
     // 2. Startaplarni yuklash
-    async function fetchStartups(activeToken: string) {
+    async function fetchStartups(activeToken: string | null) {
       try {
+        const headers: HeadersInit = {};
+        if (activeToken) {
+          headers["Authorization"] = `Bearer ${activeToken}`;
+        }
+
         const res = await fetch(`${API_BASE_URL}/api/startups/`, {
           cache: "no-store",
-          headers: {
-            Authorization: `Bearer ${activeToken}`,
-          },
+          headers,
         });
         
-        if (res.status === 401) {
+        if (res.status === 401 && activeToken) {
           localStorage.removeItem("access");
           localStorage.removeItem("refresh");
           router.push("/login");
@@ -73,19 +69,16 @@ export default function StartupsPage() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-zinc-50 dark:bg-zinc-950">
       
       {/* ══════════════════ HEADER ══════════════════ */}
-      <section className="bg-white px-4 py-12 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+      <section className="bg-white px-4 py-3 md:py-12 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
         <div className="mx-auto max-w-7xl">
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
             Barcha loyihalar va startaplar
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-zinc-500 dark:text-zinc-400">
-            Platformadagi barcha faol IT bizneslar, startaplar va raqamli loyihalar bilan tanishing. O'zingizga mos biznesni toping yoki sotib oling.
-          </p>
         </div>
       </section>
 
       {/* ══════════════════ MARKETPLACE ══════════════════ */}
-      <section className="flex-1 bg-zinc-50 py-8 dark:bg-zinc-950">
+      <section className="flex-1 bg-zinc-50 pt-2 pb-8 md:py-8 dark:bg-zinc-950">
         <MarketplaceClient startups={startups} />
       </section>
 

@@ -99,14 +99,14 @@ export default function CreateStartupPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-zinc-50 px-4 py-12 sm:px-6 lg:px-8 dark:bg-zinc-950">
-      <div className="w-full max-w-3xl space-y-8 rounded-2xl bg-white p-8 shadow-xl shadow-zinc-200/50 dark:bg-zinc-900/50 dark:shadow-none dark:ring-1 dark:ring-zinc-800">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-zinc-50 px-2 py-4 md:px-4 md:py-12 sm:px-6 lg:px-8 dark:bg-zinc-950">
+      <div className="w-full max-w-3xl space-y-4 md:space-y-8 rounded-2xl bg-white p-3 md:p-8 shadow-xl shadow-zinc-200/50 dark:bg-zinc-900/50 dark:shadow-none dark:ring-1 dark:ring-zinc-800">
         
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+        <div className="text-center mb-6 md:mb-8">
+          <h2 className="text-xl md:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
             Yangi E&apos;lon Qo&apos;shish
           </h2>
-          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="mt-1 md:mt-2 text-xs md:text-sm text-zinc-600 dark:text-zinc-400">
             Loyiha yoki tayyor biznesingizni sotish uchun ma&apos;lumotlarni kiriting
           </p>
         </div>
@@ -117,13 +117,13 @@ export default function CreateStartupPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-3 md:space-y-6">
           {/* ════ TO'LIQ ENLIKDAGI MAYDONLAR ════ */}
-          <div className="space-y-6">
+          <div className="space-y-3 md:space-y-6">
             
             {/* Sarlavha */}
             <div>
-              <label htmlFor="title" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="title" className="mb-1 md:mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Loyiha nomi <span className="text-red-500">*</span>
               </label>
               <input
@@ -134,7 +134,7 @@ export default function CreateStartupPage() {
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="Masalan: Telegram bot yasash xizmati"
-                className={`block w-full rounded-xl border ${fieldErrors.title && fieldErrors.title.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                className={`block w-full rounded-xl border ${fieldErrors.title && fieldErrors.title.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
               />
               {fieldErrors.title && fieldErrors.title.length > 0 && (
                 <p className="mt-1 text-sm text-red-500">{fieldErrors.title[0]}</p>
@@ -143,7 +143,7 @@ export default function CreateStartupPage() {
 
             {/* Texnologiyalar to'plami */}
             <div>
-              <label htmlFor="tech_stack" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="tech_stack" className="mb-1 md:mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Texnologiyalar to&apos;plami <span className="text-red-500">*</span>
               </label>
               <input
@@ -154,7 +154,7 @@ export default function CreateStartupPage() {
                 value={formData.tech_stack}
                 onChange={handleChange}
                 placeholder="Masalan: React, Django, PostgreSQL"
-                className={`block w-full rounded-xl border ${fieldErrors.tech_stack && fieldErrors.tech_stack.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                className={`block w-full rounded-xl border ${fieldErrors.tech_stack && fieldErrors.tech_stack.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
               />
               {fieldErrors.tech_stack && fieldErrors.tech_stack.length > 0 && (
                 <p className="mt-1 text-sm text-red-500">{fieldErrors.tech_stack[0]}</p>
@@ -163,18 +163,18 @@ export default function CreateStartupPage() {
 
             {/* Tavsif */}
             <div>
-              <label htmlFor="description" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="description" className="mb-1 md:mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 To&apos;liq tavsifi <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="description"
                 name="description"
                 required
-                rows={5}
+                rows={4}
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Loyihangiz haqida batafsil ma'lumot bering..."
-                className={`block w-full resize-y rounded-xl border ${fieldErrors.description && fieldErrors.description.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                className={`block w-full resize-y rounded-xl border ${fieldErrors.description && fieldErrors.description.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
               />
               {fieldErrors.description && fieldErrors.description.length > 0 && (
                 <p className="mt-1 text-sm text-red-500">{fieldErrors.description[0]}</p>
@@ -183,11 +183,11 @@ export default function CreateStartupPage() {
           </div>
 
           {/* ════ 2-KOLONNALI GRID ════ */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 md:gap-6 md:grid-cols-2">
             
             {/* Narx */}
             <div>
-              <label htmlFor="price" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="price" className="mb-1 md:mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Narxi (USD) <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -204,7 +204,7 @@ export default function CreateStartupPage() {
                   value={formData.price}
                   onChange={handleChange}
                   placeholder="0.00"
-                  className={`block w-full rounded-xl border ${fieldErrors.price && fieldErrors.price.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white py-2.5 pl-8 pr-4 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                  className={`block w-full rounded-xl border ${fieldErrors.price && fieldErrors.price.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white py-1.5 pl-6 pr-2 md:py-2.5 md:pl-8 md:pr-4 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
                 />
               </div>
               {fieldErrors.price && fieldErrors.price.length > 0 && (
@@ -214,7 +214,7 @@ export default function CreateStartupPage() {
 
             {/* Kategoriya */}
             <div>
-              <label htmlFor="project_type" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="project_type" className="mb-1 md:mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Kategoriyasi <span className="text-red-500">*</span>
               </label>
               <select
@@ -223,7 +223,7 @@ export default function CreateStartupPage() {
                 required
                 value={formData.project_type}
                 onChange={handleChange}
-                className={`block w-full appearance-none rounded-xl border ${fieldErrors.project_type && fieldErrors.project_type.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                className={`block w-full appearance-none rounded-xl border ${fieldErrors.project_type && fieldErrors.project_type.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
               >
                 <option value="website">Veb-sayt</option>
                 <option value="telegram_bot">Telegram Bot</option>
@@ -241,7 +241,7 @@ export default function CreateStartupPage() {
             
             {formData.project_type === "telegram_bot" && (
               <div>
-                <label htmlFor="bot_username" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                <label htmlFor="bot_username" className="mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   Bot Username <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
                 </label>
                 <div className="relative">
@@ -255,7 +255,7 @@ export default function CreateStartupPage() {
                     value={formData.bot_username}
                     onChange={handleChange}
                     placeholder="example_bot"
-                    className={`block w-full rounded-xl border ${fieldErrors.bot_username && fieldErrors.bot_username.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white py-2.5 pl-8 pr-4 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                    className={`block w-full rounded-xl border ${fieldErrors.bot_username && fieldErrors.bot_username.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white py-1.5 pl-7 pr-3 md:py-2.5 md:pl-8 md:pr-4 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
                   />
                 </div>
                 {fieldErrors.bot_username && fieldErrors.bot_username.length > 0 && (
@@ -268,7 +268,7 @@ export default function CreateStartupPage() {
               <>
                 {/* Play Store Link */}
                 <div>
-                  <label htmlFor="play_store_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  <label htmlFor="play_store_link" className="mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                     Play Store Havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
                   </label>
                   <input
@@ -278,7 +278,7 @@ export default function CreateStartupPage() {
                     value={formData.play_store_link}
                     onChange={handleChange}
                     placeholder="https://play.google.com/..."
-                    className={`block w-full rounded-xl border ${fieldErrors.play_store_link && fieldErrors.play_store_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                    className={`block w-full rounded-xl border ${fieldErrors.play_store_link && fieldErrors.play_store_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-3 py-1.5 md:px-4 md:py-2.5 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
                   />
                   {fieldErrors.play_store_link && fieldErrors.play_store_link.length > 0 && (
                     <p className="mt-1 text-sm text-red-500">{fieldErrors.play_store_link[0]}</p>
@@ -287,7 +287,7 @@ export default function CreateStartupPage() {
 
                 {/* App Store Link */}
                 <div>
-                  <label htmlFor="app_store_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  <label htmlFor="app_store_link" className="mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                     App Store Havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
                   </label>
                   <input
@@ -297,7 +297,7 @@ export default function CreateStartupPage() {
                     value={formData.app_store_link}
                     onChange={handleChange}
                     placeholder="https://apps.apple.com/..."
-                    className={`block w-full rounded-xl border ${fieldErrors.app_store_link && fieldErrors.app_store_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                    className={`block w-full rounded-xl border ${fieldErrors.app_store_link && fieldErrors.app_store_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-3 py-1.5 md:px-4 md:py-2.5 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
                   />
                   {fieldErrors.app_store_link && fieldErrors.app_store_link.length > 0 && (
                     <p className="mt-1 text-sm text-red-500">{fieldErrors.app_store_link[0]}</p>
@@ -310,7 +310,7 @@ export default function CreateStartupPage() {
               <>
                 {/* Demo Link */}
                 <div>
-                  <label htmlFor="demo_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  <label htmlFor="demo_link" className="mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                     Jonli demo havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
                   </label>
                   <input
@@ -320,7 +320,7 @@ export default function CreateStartupPage() {
                     value={formData.demo_link}
                     onChange={handleChange}
                     placeholder="https://example.com"
-                    className={`block w-full rounded-xl border ${fieldErrors.demo_link && fieldErrors.demo_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                    className={`block w-full rounded-xl border ${fieldErrors.demo_link && fieldErrors.demo_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-3 py-1.5 md:px-4 md:py-2.5 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
                   />
                   {fieldErrors.demo_link && fieldErrors.demo_link.length > 0 && (
                     <p className="mt-1 text-sm text-red-500">{fieldErrors.demo_link[0]}</p>
@@ -329,7 +329,7 @@ export default function CreateStartupPage() {
 
                 {/* GitHub Link */}
                 <div>
-                  <label htmlFor="github_link" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  <label htmlFor="github_link" className="mb-1.5 block text-xs md:text-sm font-medium text-zinc-700 dark:text-zinc-300">
                     GitHub havolasi <span className="text-xs text-zinc-400">(Ixtiyoriy)</span>
                   </label>
                   <input
@@ -339,7 +339,7 @@ export default function CreateStartupPage() {
                     value={formData.github_link}
                     onChange={handleChange}
                     placeholder="https://github.com/..."
-                    className={`block w-full rounded-xl border ${fieldErrors.github_link && fieldErrors.github_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
+                    className={`block w-full rounded-xl border ${fieldErrors.github_link && fieldErrors.github_link.length > 0 ? "border-red-500 focus:ring-red-500/20" : "border-zinc-300 focus:border-indigo-600 focus:ring-indigo-600/20"} bg-white px-3 py-1.5 md:px-4 md:py-2.5 text-sm md:text-base text-zinc-900 outline-none transition focus:ring-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:focus:border-indigo-500`}
                   />
                   {fieldErrors.github_link && fieldErrors.github_link.length > 0 && (
                     <p className="mt-1 text-sm text-red-500">{fieldErrors.github_link[0]}</p>
@@ -353,22 +353,28 @@ export default function CreateStartupPage() {
           <div className="pt-6 flex flex-col-reverse sm:flex-row items-center gap-4 sm:justify-end">
             <Link
               href="/"
-              className="w-full sm:w-auto rounded-xl px-6 py-2.5 text-center text-sm font-semibold text-zinc-700 hover:bg-zinc-100 transition dark:text-zinc-300 dark:hover:bg-zinc-800"
+              className="w-full sm:w-auto rounded-xl px-4 py-2 md:px-6 md:py-2.5 text-center text-xs md:text-sm font-semibold text-zinc-700 hover:bg-zinc-100 transition dark:text-zinc-300 dark:hover:bg-zinc-800"
             >
               Bekor qilish
             </Link>
+          </div>
+
+          <div className="pt-2 md:pt-4">
             <button
               type="submit"
               disabled={loading}
-              className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-indigo-600 px-8 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600/50 disabled:opacity-50"
+              className="inline-flex h-10 md:h-12 w-full items-center justify-center rounded-xl bg-indigo-600 px-6 text-sm md:text-base font-bold text-white transition hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/30 disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
             >
               {loading ? (
-                <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                  <span>Qo&apos;shilmoqda...</span>
-                </div>
+                <>
+                  <svg className="-ml-1 mr-2 h-4 w-4 md:h-5 md:w-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Yaratilmoqda...
+                </>
               ) : (
-                "E'lonni joylash"
+                "E'lonni joylashtirish"
               )}
             </button>
           </div>

@@ -36,6 +36,16 @@ const CATEGORIES = [
   { value: "other",        label: "Boshqa",         icon: "💡" },
 ];
 
+const TECH_MAP: Record<string, string[]> = {
+  all: ["React", "Python", "Node.js", "Django", "Next.js", "Tailwind CSS", "PostgreSQL"],
+  website: ["React", "Next.js", "Vue", "Tailwind CSS", "Node.js", "PHP", "Django"],
+  telegram_bot: ["Python", "Aiogram", "Telebot", "Node.js", "Telegraf", "Go"],
+  mobile_app: ["Flutter", "React Native", "Swift", "Kotlin", "Java"],
+  saas: ["React", "Next.js", "Django", "PostgreSQL", "AWS", "Stripe"],
+  ecommerce: ["Shopify", "WooCommerce", "Next.js", "Django", "Node.js"],
+  other: ["Figma", "UI/UX", "Marketing", "SEO"],
+};
+
 // ─── Yordamchi funksiyalar ────────────────────────────────────────────────────
 
 function formatPrice(price: string): string {
@@ -97,59 +107,59 @@ export function StartupCard({ s }: { s: Startup }) {
         </div>
       )}
 
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col p-3 md:p-5">
         {/* Header */}
-        <div className="mb-4 flex items-start gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-slate-50 to-indigo-50 text-xl dark:from-zinc-800 dark:to-indigo-900/30">
+        <div className="mb-2 md:mb-4 flex items-start gap-2 md:gap-3">
+          <div className="flex h-9 w-9 md:h-11 md:w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-slate-50 to-indigo-50 text-base md:text-xl dark:from-zinc-800 dark:to-indigo-900/30">
             {getProjectIcon(s.project_type)}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
-              <span className={`rounded-md px-2 py-0.5 text-xs font-medium ${badge}`}>
+            <div className="mb-1 md:mb-1.5 flex flex-wrap items-center gap-1 md:gap-1.5">
+              <span className={`rounded-md px-1.5 py-0.5 md:px-2 md:py-0.5 text-[10px] md:text-xs font-medium ${badge}`}>
                 {s.project_type_display}
               </span>
               {s.is_premium && (
-                <span className="rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-2 py-0.5 text-xs font-semibold text-white">
+                <span className="rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-1.5 py-0.5 md:px-2 md:py-0.5 text-[10px] md:text-xs font-semibold text-white">
                   ⭐ Premium
                 </span>
               )}
             </div>
-            <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-zinc-900 dark:text-white">
+            <h3 className="line-clamp-2 text-sm md:text-lg font-semibold leading-snug text-zinc-900 dark:text-white">
               {s.title}
             </h3>
           </div>
         </div>
 
         {/* Description */}
-        <p className="mb-4 line-clamp-2 flex-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+        <p className="mb-2 md:mb-4 line-clamp-2 flex-1 text-[10px] md:text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
           {s.description}
         </p>
 
         {/* Tech badges */}
-        <div className="mb-4 flex flex-wrap gap-1">
+        <div className="mb-2 md:mb-4 flex flex-wrap gap-1">
           {techList.slice(0, 4).map((t, i) => (
             <span
               key={`${t}-${i}`}
-              className="rounded-md border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-xs text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
+              className="rounded-md border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] md:text-xs text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
             >
               {t}
             </span>
           ))}
           {techList.length > 4 && (
-            <span className="rounded-md border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-xs text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800">
+            <span className="rounded-md border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] md:text-xs text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800">
               +{techList.length - 4}
             </span>
           )}
         </div>
 
         {/* Dinamik Havolalar (Loyiha turiga qarab) */}
-        <div className="mb-4 flex flex-wrap gap-2">
+        <div className="mb-3 md:mb-4 flex flex-wrap gap-1.5 md:gap-2">
           {s.project_type === "telegram_bot" && s.bot_username && (
             <a
               href={`https://t.me/${s.bot_username.replace("@", "")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-md bg-sky-50 px-2 py-1.5 text-xs font-semibold text-sky-600 transition hover:bg-sky-100 dark:bg-sky-900/30 dark:text-sky-400 dark:hover:bg-sky-900/50"
+              className="inline-flex items-center gap-1 rounded-md bg-sky-50 px-1.5 py-1 text-[10px] md:px-2 md:py-1.5 md:text-xs font-semibold text-sky-600 transition hover:bg-sky-100 dark:bg-sky-900/30 dark:text-sky-400 dark:hover:bg-sky-900/50"
             >
               🤖 Botga o'tish
             </a>
@@ -162,7 +172,7 @@ export function StartupCard({ s }: { s: Startup }) {
                   href={s.play_store_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-1.5 text-xs font-semibold text-emerald-600 transition hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50"
+                  className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-1.5 py-1 text-[10px] md:px-2 md:py-1.5 md:text-xs font-semibold text-emerald-600 transition hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50"
                 >
                   ▶️ Play Store
                 </a>
@@ -172,7 +182,7 @@ export function StartupCard({ s }: { s: Startup }) {
                   href={s.app_store_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-1.5 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                  className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-1.5 py-1 text-[10px] md:px-2 md:py-1.5 md:text-xs font-semibold text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
                 >
                   🍏 App Store
                 </a>
@@ -188,7 +198,7 @@ export function StartupCard({ s }: { s: Startup }) {
                   href={s.github_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-1.5 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                  className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-1.5 py-1 text-[10px] md:px-2 md:py-1.5 md:text-xs font-semibold text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
                 >
                   💻 GitHub
                 </a>
@@ -198,27 +208,27 @@ export function StartupCard({ s }: { s: Startup }) {
         </div>
 
         {/* Footer */}
-        <div className={`flex items-center justify-between gap-2 border-t pt-4 ${
+        <div className={`flex items-center justify-between gap-2 border-t pt-3 md:pt-4 ${
           s.is_sold
             ? "border-red-100 dark:border-red-900/30"
             : "border-zinc-100 dark:border-zinc-800"
         }`}>
           {s.is_sold ? (
-            <span className="inline-flex items-center gap-1.5 text-sm font-bold text-red-500 dark:text-red-400">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+            <span className="inline-flex items-center gap-1.5 text-xs md:text-sm font-bold text-red-500 dark:text-red-400">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3 md:h-4 md:w-4">
                 <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v4.59L7.3 9.24a.75.75 0 0 0-1.1 1.02l3.25 3.5a.75.75 0 0 0 1.1 0l3.25-3.5a.75.75 0 1 0-1.1-1.02l-1.95 2.1V6.75Z" clipRule="evenodd" />
               </svg>
               Sotildi
             </span>
           ) : (
-            <span className="text-lg font-bold text-zinc-900 dark:text-white">
+            <span className="text-base md:text-xl font-bold text-zinc-900 dark:text-white">
               {formatPrice(s.price)}
             </span>
           )}
           <Link
             href={`/startups/${s.id}`}
             id={`startup-details-${s.id}`}
-            className={`inline-flex h-8 items-center justify-center rounded-lg border px-3 text-xs font-medium transition-all ${
+            className={`inline-flex h-7 md:h-8 items-center justify-center rounded-lg border px-2.5 md:px-3 text-[10px] md:text-xs font-medium transition-all ${
               s.is_sold
                 ? "border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-900/50"
                 : "border-zinc-200 bg-zinc-50 text-zinc-700 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:border-indigo-600 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-300"
@@ -271,62 +281,115 @@ function EmptyState({ query, category }: { query: string; category: string }) {
 export default function MarketplaceClient({ startups }: { startups: Startup[] }) {
   const [query, setQuery]       = useState("");
   const [category, setCategory] = useState("all");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Client-side filtrlash
+  // Filter States
+  const [sortOrder, setSortOrder] = useState<"newest" | "price_asc" | "price_desc">("newest");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [isProfitable, setIsProfitable] = useState(false);
+  const [selectedTech, setSelectedTech] = useState<string[]>([]);
+
+  // Client-side filtrlash va saralash
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
-    return startups.filter((s) => {
+    let result = startups.filter((s) => {
       const matchCat = category === "all" || s.project_type === category;
       const matchQ   = !q || (
         s.title.toLowerCase().includes(q) ||
         s.description.toLowerCase().includes(q) ||
         s.tech_stack.toLowerCase().includes(q)
       );
-      return matchCat && matchQ;
+
+      // Narx
+      const priceNum = parseFloat(s.price);
+      const matchMinPrice = minPrice === "" || (!isNaN(priceNum) && priceNum >= parseFloat(minPrice));
+      const matchMaxPrice = maxPrice === "" || (!isNaN(priceNum) && priceNum <= parseFloat(maxPrice));
+
+      // Daromad keltiruvchi (Premium deb olamiz)
+      const matchProfitable = !isProfitable || s.is_premium;
+
+      // Texnologiyalar
+      const matchTech = selectedTech.length === 0 || selectedTech.some(t => s.tech_stack.toLowerCase().includes(t.toLowerCase()));
+
+      return matchCat && matchQ && matchMinPrice && matchMaxPrice && matchProfitable && matchTech;
     });
-  }, [startups, query, category]);
+
+    // Saralash
+    if (sortOrder === "price_asc") {
+      result.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortOrder === "price_desc") {
+      result.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    } else {
+      result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    }
+
+    return result;
+  }, [startups, query, category, minPrice, maxPrice, isProfitable, selectedTech, sortOrder]);
+
+  const toggleTech = (tech: string) => {
+    setSelectedTech(prev => 
+      prev.includes(tech) ? prev.filter(t => t !== tech) : [...prev, tech]
+    );
+  };
 
   return (
     <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
 
       {/* ── Qidiruv + Filtr panel ── */}
-      <div className="sticky top-16 z-30 -mx-4 mb-8 bg-white/95 px-4 pb-4 pt-5 backdrop-blur-xl dark:bg-zinc-950/95 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div className="sticky top-16 z-30 -mx-4 mb-4 md:mb-8 bg-white/95 px-4 pb-3 md:pb-4 pt-4 md:pt-5 backdrop-blur-xl dark:bg-zinc-950/95 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
 
-        {/* Qidiruv input */}
-        <div className="relative mb-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            width="18" height="18"
-            className="pointer-events-none absolute left-4 top-1/2 h-[18px] w-[18px] shrink-0 -translate-y-1/2 text-zinc-400"
+        {/* Qidiruv input + Kengaytirilgan Filtr */}
+        <div className="flex items-center gap-2 mb-4">
+          <div className="relative flex-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              width="18" height="18"
+              className="pointer-events-none absolute left-4 top-1/2 h-[18px] w-[18px] shrink-0 -translate-y-1/2 text-zinc-400"
+            >
+              <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clipRule="evenodd" />
+            </svg>
+            <input
+              id="marketplace-search"
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Loyiha nomi, texnologiya..."
+              className="h-10 md:h-12 w-full rounded-xl border border-zinc-200 bg-white pl-11 pr-4 text-xs md:text-sm text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all hover:border-zinc-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:placeholder-zinc-500 dark:hover:border-zinc-600 dark:focus:border-indigo-500"
+            />
+            {/* Natija soni */}
+            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] md:text-xs font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 hidden sm:block">
+              {filtered.length} ta
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsFilterOpen(true)}
+            className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 shadow-sm transition-all hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            aria-label="Kengaytirilgan filtrlar"
           >
-            <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clipRule="evenodd" />
-          </svg>
-          <input
-            id="marketplace-search"
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Loyiha nomi, texnologiya bo'yicha qidiring..."
-            className="h-12 w-full rounded-xl border border-zinc-200 bg-white pl-11 pr-4 text-sm text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all hover:border-zinc-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:placeholder-zinc-500 dark:hover:border-zinc-600 dark:focus:border-indigo-500"
-          />
-          {/* Natija soni */}
-          <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-            {filtered.length} ta
-          </span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5 md:h-6 md:w-6">
+              <path fillRule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 0 1 .628.74v2.288a2.25 2.25 0 0 1-.659 1.59l-4.682 4.683a2.25 2.25 0 0 0-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 0 1 8 18.25v-5.757a2.25 2.25 0 0 0-.659-1.591L2.659 6.22A2.25 2.25 0 0 1 2 4.629V2.34a.75.75 0 0 1 .628-.74Z" clipRule="evenodd" />
+            </svg>
+          </button>
         </div>
 
         {/* Kategoriya tugmalari — scroll qilish mumkin */}
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <div className="flex gap-2 overflow-x-auto whitespace-nowrap pb-2 [&::-webkit-scrollbar]:hidden scrollbar-none">
           {CATEGORIES.map((cat) => {
             const isActive = category === cat.value;
             return (
               <button
                 key={cat.value}
                 id={`filter-${cat.value}`}
-                onClick={() => setCategory(cat.value)}
-                className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-150 ${
+                onClick={() => {
+                  setCategory(cat.value);
+                  setSelectedTech([]); // Kategoriya o'zgarganda tanlangan texnologiyalarni tozalash
+                }}
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs md:px-3.5 md:py-1.5 md:text-sm font-medium transition-all duration-150 ${
                   isActive
                     ? "border-indigo-500 bg-indigo-600 text-white shadow-md shadow-indigo-500/20"
                     : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
@@ -344,13 +407,142 @@ export default function MarketplaceClient({ startups }: { startups: Startup[] })
       </div>
 
       {/* ── Kartalar Grid ── */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {filtered.length === 0 ? (
           <EmptyState query={query} category={category} />
         ) : (
           filtered.map((s) => <StartupCard key={s.id} s={s} />)
         )}
       </div>
+
+      {/* ── Advanced Filter Modal / Bottom Sheet ── */}
+      {isFilterOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-zinc-900/40 backdrop-blur-sm md:items-center">
+          {/* Orqa fonni bosganda yopish */}
+          <div 
+            className="absolute inset-0" 
+            onClick={() => setIsFilterOpen(false)}
+            aria-hidden="true"
+          />
+
+          <div className="relative w-full max-w-lg rounded-t-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900 md:rounded-2xl flex flex-col gap-6 max-h-[90vh] overflow-y-auto transform transition-all">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Kengaytirilgan Filtrlar</h3>
+              <button 
+                onClick={() => setIsFilterOpen(false)}
+                className="rounded-full p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Saralash */}
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Saralash
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { value: "newest", label: "Eng yangilari" },
+                  { value: "price_asc", label: "Arzondan qimmatga" },
+                  { value: "price_desc", label: "Qimmatdan arzonga" }
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setSortOrder(opt.value as any)}
+                    className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      sortOrder === opt.value
+                        ? "border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
+                        : "border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Narx oralig'i */}
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Narx oralig'i (USD)
+              </label>
+              <div className="flex items-center gap-3">
+                <input 
+                  type="number" 
+                  placeholder="Min narx" 
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-indigo-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white dark:focus:border-indigo-500" 
+                />
+                <span className="text-zinc-400">-</span>
+                <input 
+                  type="number" 
+                  placeholder="Max narx" 
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-indigo-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white dark:focus:border-indigo-500" 
+                />
+              </div>
+            </div>
+
+            {/* Texnologiyalar (Dinamik) */}
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Texnologiyalar
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {(TECH_MAP[category] || TECH_MAP.all).map((tech) => (
+                  <button
+                    key={tech}
+                    onClick={() => toggleTech(tech)}
+                    className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      selectedTech.includes(tech)
+                        ? "border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
+                        : "border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                    }`}
+                  >
+                    {tech}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Qoshimcha parametrlar */}
+            <div>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={isProfitable}
+                  onChange={(e) => setIsProfitable(e.target.checked)}
+                  className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-600 dark:border-zinc-700 dark:bg-zinc-900 dark:checked:bg-indigo-500" 
+                />
+                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Daromad keltiruvchi loyihalar (Premium)
+                </span>
+              </label>
+            </div>
+
+            {/* Tugmalar */}
+            <div className="mt-2 flex gap-3">
+              <button 
+                onClick={() => setIsFilterOpen(false)}
+                className="w-full rounded-xl border border-zinc-200 py-2.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                Yopish
+              </button>
+              <button 
+                onClick={() => setIsFilterOpen(false)}
+                className="w-full rounded-xl bg-indigo-600 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700"
+              >
+                Qo'llash
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

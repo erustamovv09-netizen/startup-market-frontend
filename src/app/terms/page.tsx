@@ -10,20 +10,20 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-24">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-24 pb-32">
-        <div className="mx-auto max-w-4xl px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-5xl lg:text-6xl">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-16 pb-24 md:pt-24 md:pb-32">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl lg:text-6xl">
             Foydalanish shartlari
           </h1>
-          <p className="mt-6 text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-4 md:mt-6 text-base md:text-lg leading-7 md:leading-8 text-zinc-600 dark:text-zinc-400">
             Platformamizdan xavfsiz va to&apos;g&apos;ri foydalanish qoidalari.
           </p>
         </div>
       </div>
 
       {/* Floating Paper Content */}
-      <div className="mx-auto max-w-4xl px-6 lg:px-8 -mt-16">
-        <div className="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 md:p-12 mb-20 relative overflow-hidden">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 -mt-12 md:-mt-16">
+        <div className="rounded-2xl md:rounded-3xl bg-white p-4 sm:p-8 shadow-xl ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 md:p-12 mb-12 md:mb-20 relative overflow-hidden">
           {/* Glassmorphism gradient orb */}
           <div className="absolute top-0 right-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
           

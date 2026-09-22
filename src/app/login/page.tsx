@@ -65,7 +65,12 @@ function LoginForm() {
     setServerError("");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/login/`, {
+      console.log("Login so'rovi yuborilmoqda...");
+      // Odatda Django SimpleJWT da endpoint /api/token/ bo'ladi, agar /api/login/ ishlamasa.
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+      const endpoint = `${API_BASE}/api/token/`; 
+      
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -76,24 +81,22 @@ function LoginForm() {
 
       if (res.ok) {
         const data = await res.json();
-        // JWT tokenlarni localStorage ga saqlash
         localStorage.setItem("access",  data.access);
         localStorage.setItem("refresh", data.refresh);
-        // Middleware o'qiy olishi uchun cookie'ga ham saqlaymiz
         document.cookie = `access=${data.access}; path=/; max-age=86400; SameSite=Lax`;
         
-        // Bosh sahifaga yo'naltirish
         router.push("/");
-        router.refresh(); // server komponentlarni yangilash uchun
+        router.refresh(); 
       } else {
         const data = await res.json();
-        // Django SimpleJWT xato: { detail: "..." }
         setServerError(
           data.detail ||
           "Foydalanuvchi nomi yoki parol noto'g'ri"
         );
       }
-    } catch {
+    } catch (err) {
+      console.error("Login so'rovida xatolik yuz berdi:", err);
+      alert("Xatolik yuz berdi: " + String(err));
       setServerError("Serverga ulanib bo'lmadi. Keyinroq urinib ko'ring.");
     } finally {
       setIsSubmitting(false);
