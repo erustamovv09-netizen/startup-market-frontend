@@ -57,8 +57,10 @@ function LoginForm() {
 
   // ─── Submit ───────────────────────────────────────────────────────────────
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleSubmit(e?: React.FormEvent) {
+    if (e) {
+      e.preventDefault();
+    }
     if (!validate()) return;
 
     setIsSubmitting(true);
@@ -67,9 +69,16 @@ function LoginForm() {
     try {
       console.log("Login so'rovi yuborilmoqda...");
       // Odatda Django SimpleJWT da endpoint /api/token/ bo'ladi, agar /api/login/ ishlamasa.
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-      const endpoint = `${API_BASE}/api/token/`; 
+      const getApiBase = () => {
+        if (typeof window !== "undefined") {
+          // Automatically uses '10.57.228.98' on mobile or 'localhost' on PC
+          return `http://${window.location.hostname}:8000`;
+        }
+        return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      };
       
+      const API_BASE = getApiBase();
+      const endpoint = `${API_BASE}/api/token/`;
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -187,7 +196,15 @@ function LoginForm() {
             )}
 
             {/* Forma */}
-            <form id="login-form" onSubmit={handleSubmit} noValidate className="space-y-4">
+            <form 
+              id="login-form" 
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit(e);
+              }} 
+              noValidate 
+              className="space-y-4"
+            >
 
               {/* Username */}
               <div>

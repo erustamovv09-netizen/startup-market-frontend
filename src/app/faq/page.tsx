@@ -25,32 +25,32 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-24">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-24 pb-32">
-        <div className="mx-auto max-w-4xl px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-5xl lg:text-6xl">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-16 pb-24 md:pt-24 md:pb-32">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl lg:text-5xl">
             Ko&apos;p beriladigan savollar (FAQ)
           </h1>
-          <p className="mt-6 text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-4 md:mt-6 text-base md:text-lg leading-7 md:leading-8 text-zinc-600 dark:text-zinc-400">
             Sizni qiziqtirgan barcha savollarga shu yerda javob topishingiz mumkin.
           </p>
         </div>
       </div>
 
       {/* Floating FAQ Cards */}
-      <div className="mx-auto max-w-4xl px-6 lg:px-8 -mt-16">
-        <div className="space-y-6 mb-20 relative z-10">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 -mt-12 md:-mt-16">
+        <div className="space-y-4 md:space-y-6 mb-12 md:mb-20 relative z-10">
           {faqs.map((faq, index) => (
             <div 
               key={index} 
-              className="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-lg ring-1 ring-zinc-200 dark:ring-zinc-800 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+              className="bg-white dark:bg-zinc-900 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-lg ring-1 ring-zinc-200 dark:ring-zinc-800 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
             >
-              <h3 className="mb-4 text-xl font-bold text-zinc-900 dark:text-white flex items-start gap-4">
+              <h3 className="mb-3 md:mb-4 text-lg md:text-xl font-bold text-zinc-900 dark:text-white flex items-start gap-3 md:gap-4">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 font-extrabold text-sm">
                   Q
                 </span>
                 <span className="pt-1">{faq.question}</span>
               </h3>
-              <p className="pl-12 text-zinc-600 dark:text-zinc-400 leading-relaxed text-lg">
+              <p className="pl-11 md:pl-12 text-sm md:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
                 {faq.answer}
               </p>
             </div>

@@ -10,20 +10,20 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-24">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-24 pb-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-          <h2 className="text-base font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Narxlar</h2>
-          <p className="mt-2 text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-5xl">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-16 pb-24 md:pt-24 md:pb-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-sm md:text-base font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Narxlar</h2>
+          <p className="mt-2 text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl lg:text-5xl">
             Sizning loyihangiz uchun mos tarif
           </p>
-          <p className="mt-6 mx-auto max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-4 md:mt-6 mx-auto max-w-2xl text-base md:text-lg leading-7 md:leading-8 text-zinc-600 dark:text-zinc-400">
             StartUp Market hozirda bepul ishlamoqda, lekin tez orada premium xizmatlarni taklif qilamiz.
           </p>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 -mt-16">
-        <div className="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-12 md:-mt-16">
+        <div className="mx-auto grid max-w-md grid-cols-1 gap-6 md:gap-8 lg:max-w-4xl lg:grid-cols-2">
           
           {/* Boshlang'ich (Free) Card */}
           <div className="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-xl ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 sm:p-10 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">

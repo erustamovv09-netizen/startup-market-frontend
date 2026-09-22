@@ -90,23 +90,23 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-24">
       {/* ── Hero Header ── */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-24 pb-36">
-        <div className="mx-auto max-w-5xl px-6 lg:px-8 text-center">
-          <h2 className="text-base font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-12 md:pt-24 pb-24 md:pb-36">
+        <div className="pt-4 sm:pt-10 pb-12 px-4 sm:px-6 max-w-7xl mx-auto text-center">
+          <h2 className="text-sm md:text-base font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
             Murojaat
           </h2>
-          <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-5xl lg:text-6xl">
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl lg:text-5xl">
             Biz bilan aloqa
           </h1>
-          <p className="mt-6 mx-auto max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-4 md:mt-6 mx-auto max-w-2xl text-base md:text-lg leading-7 md:leading-8 text-zinc-600 dark:text-zinc-400">
             Savol, takliflar yoki hamkorlik bo&apos;yicha murojaat qiling. Ish soatlari davomida tez javob beramiz.
           </p>
         </div>
       </div>
 
       {/* ── Floating Card ── */}
-      <div className="mx-auto max-w-5xl px-6 lg:px-8 -mt-20 relative z-10">
-        <div className="rounded-3xl bg-white shadow-2xl ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 p-8 md:p-12 mb-20 relative overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-16 md:-mt-20 relative z-10">
+        <div className="rounded-2xl md:rounded-3xl bg-white shadow-2xl ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 p-6 sm:p-8 md:p-12 mb-20 relative overflow-hidden">
           {/* Decorative gradient orbs */}
           <div className="absolute top-0 right-0 -mr-24 -mt-24 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 -ml-24 -mb-24 h-72 w-72 rounded-full bg-purple-500/10 blur-3xl pointer-events-none"></div>

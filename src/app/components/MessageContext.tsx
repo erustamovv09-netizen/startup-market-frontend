@@ -37,7 +37,6 @@ export function useMessages() {
 export function MessageProvider({ children }: { children: ReactNode }) {
   const [unreadCount, setUnreadCount] = useState(0);
   const pathname = usePathname();
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchUnread = useCallback(async () => {
     // Only run client-side and only when user might be logged in
@@ -90,13 +89,11 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Initial fetch + poll every 30 s
+  // Initial fetch + poll every 60 s
   useEffect(() => {
     fetchUnread();
-    intervalRef.current = setInterval(fetchUnread, 30_000);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
+    const timer = setInterval(fetchUnread, 60_000);
+    return () => clearInterval(timer);
   }, [fetchUnread]);
 
   // Re-fetch on route change (e.g. user navigates away from chat)

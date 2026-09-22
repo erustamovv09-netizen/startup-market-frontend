@@ -47,10 +47,10 @@ export default function HowItWorksPage() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl lg:text-5xl">
               StartUp Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">qanday ishlaydi?</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
+            <p className="mx-auto mt-4 md:mt-6 max-w-2xl text-base md:text-lg text-zinc-600 dark:text-zinc-400">
               Bizning platformamiz orqali o&apos;z IT loyihangizni sotish yoki tayyor biznes sotib olish uchta oddiy qadamdan iborat.
             </p>
           </div>

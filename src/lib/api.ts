@@ -5,8 +5,13 @@
  * NEXT_PUBLIC_API_URL ni production URL ga o'zgartiring.
  */
 
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+export const API_BASE_URL = (() => {
+  if (typeof window !== "undefined") {
+    // Automatically uses '10.57.228.98' on mobile or 'localhost' on PC
+    return `http://${window.location.hostname}:8000`;
+  }
+  return process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+})();
 
 /**
  * Authorization headeri bilan tuzilgan fetch.

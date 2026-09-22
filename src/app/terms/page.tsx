@@ -12,7 +12,7 @@ export default function TermsPage() {
       {/* Hero Header */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-indigo-950/30 pt-16 pb-24 md:pt-24 md:pb-32">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl lg:text-6xl">
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white sm:text-4xl lg:text-5xl">
             Foydalanish shartlari
           </h1>
           <p className="mt-4 md:mt-6 text-base md:text-lg leading-7 md:leading-8 text-zinc-600 dark:text-zinc-400">
@@ -28,12 +28,12 @@ export default function TermsPage() {
           <div className="absolute top-0 right-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
           
           <div className="relative z-10 prose prose-lg prose-indigo max-w-none text-zinc-600 dark:prose-invert dark:text-zinc-300">
-            <p className="mb-8 text-xl font-medium leading-relaxed text-zinc-800 dark:text-zinc-200">
+            <p className="mb-6 md:mb-8 text-lg md:text-xl font-medium leading-relaxed text-zinc-800 dark:text-zinc-200">
               Ushbu platformadan foydalanish orqali siz quyidagi shartlarga to&apos;liq rozi bo&apos;lasiz:
             </p>
             
-            <ul className="space-y-6 text-lg leading-relaxed list-none p-0 mt-8">
-              <li className="flex items-start gap-4">
+            <ul className="space-y-6 text-base md:text-lg leading-relaxed list-none p-0 mt-6 md:mt-8">
+              <li className="flex items-start gap-3 md:gap-4">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 mt-1">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -41,7 +41,7 @@ export default function TermsPage() {
                 </span>
                 <span>Foydalanuvchilar faqat o&apos;zlariga tegishli bo&apos;lgan yoki sotish huquqiga ega bo&apos;lgan loyihalarni joylashtirishi shart. Birovning intellektual mulkini o&apos;zlashtirish taqiqlanadi.</span>
               </li>
-              <li className="flex items-start gap-4">
+              <li className="flex items-start gap-3 md:gap-4">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 mt-1">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -49,7 +49,7 @@ export default function TermsPage() {
                 </span>
                 <span>Boshqa foydalanuvchilar bilan muloqotda o&apos;zaro hurmatni saqlash, haqoratli so&apos;zlardan foydalanmaslik qat&apos;iy talab etiladi. Qoidabuzarlar darhol va ogohlantirishsiz bloklanadi.</span>
               </li>
-              <li className="flex items-start gap-4">
+              <li className="flex items-start gap-3 md:gap-4">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 mt-1">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
