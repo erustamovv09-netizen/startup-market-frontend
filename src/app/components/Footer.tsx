@@ -66,8 +66,9 @@ export default function Footer() {
   const pathname = usePathname();
   const year = new Date().getFullYear();
 
-  // Hide footer on chat pages
-  if (pathname.startsWith("/chat") || pathname.startsWith("/messages") || pathname.startsWith("/inbox")) {
+  // Hide footer on chat and auth pages
+  const hiddenRoutes = ["/chat", "/messages", "/inbox", "/login", "/register"];
+  if (hiddenRoutes.some(route => pathname.startsWith(route))) {
     return null;
   }
 
