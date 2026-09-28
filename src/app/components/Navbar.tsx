@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { useMessages } from "./MessageContext";
 
 export default function Navbar() {
@@ -37,13 +38,26 @@ export default function Navbar() {
 
   const closeMenu = () => setIsMenuOpen(false);
 
-  const handleLogout = () => {
+  const handleLogout = async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+
+    // 1. LocalStorage va Cookie dagi tokenlarni o'chirish
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     document.cookie = "access=; path=/; max-age=0; SameSite=Lax";
+
     setIsLoggedIn(false);
     closeMenu();
-    router.push("/login");
+
+    try {
+      // 2. NextAuth (Google) seansini ham o'chirish
+      await signOut({ redirect: false });
+    } catch (err) {
+      console.error("SignOut xatosi:", err);
+    }
+
+    // 3. React state va keshlarni to'liq tozalash uchun /login sahifasiga yo'naltirish
+    window.location.href = "/login";
   };
 
   return (
@@ -82,11 +96,10 @@ export default function Navbar() {
                   key={href}
                   href={href}
                   id={id}
-                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-150 ${
-                    isActive
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-150 ${isActive
                       ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400"
                       : "text-zinc-600 hover:bg-zinc-100 hover:text-indigo-600 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-indigo-400"
-                  }`}
+                    }`}
                 >
                   {label}
                 </Link>
@@ -109,7 +122,9 @@ export default function Navbar() {
                       </svg>
                       <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500 dark:border-zinc-950" />
                     </Link>
-                    <button onClick={handleLogout}
+                    <button
+                      type="button"
+                      onClick={handleLogout}
                       className="inline-flex h-9 items-center rounded-lg border border-zinc-200 bg-zinc-50 px-4 text-sm font-medium text-zinc-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
                     >
                       Chiqish
@@ -164,11 +179,10 @@ export default function Navbar() {
 
       {/* Drawer panel — slides in from top, below the navbar */}
       <div
-        className={`fixed inset-x-0 top-14 z-50 md:hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen
+        className={`fixed inset-x-0 top-14 z-50 md:hidden transition-all duration-300 ease-in-out ${isMenuOpen
             ? "translate-y-0 opacity-100 pointer-events-auto"
             : "-translate-y-4 opacity-0 pointer-events-none"
-        }`}
+          }`}
       >
         <div className="mx-0 border-b border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-950">
           <nav className="flex flex-col gap-1 p-4">
@@ -229,7 +243,9 @@ export default function Navbar() {
                     </svg>
                     Profilim
                   </Link>
-                  <button onClick={handleLogout}
+                  <button
+                    type="button"
+                    onClick={handleLogout}
                     className="mt-1 flex w-full items-center gap-3 rounded-xl bg-red-50 px-4 py-3 text-base font-semibold text-red-600 transition hover:bg-red-100 dark:bg-red-950/30 dark:text-red-400"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5 shrink-0">

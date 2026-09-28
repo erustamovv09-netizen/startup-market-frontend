@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { MessageProvider } from "./components/MessageContext";
+import AuthProvider from "./components/AuthProvider"; // 1. AuthProvider ni import qilamiz
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,11 +35,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-white dark:bg-zinc-950">
+        {/* 2. Butun ilovani AuthProvider bilan o'rab chiqamiz */}
+        <AuthProvider>
           <MessageProvider>
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
           </MessageProvider>
+        </AuthProvider>
       </body>
     </html>
   );

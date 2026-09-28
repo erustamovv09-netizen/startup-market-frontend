@@ -4,7 +4,7 @@ import { API_BASE_URL } from "@/lib/api";
 import { useState, type FormEvent, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Suspense } from "react";
 
 // ─── Turlar ───────────────────────────────────────────────────────────────────
@@ -22,17 +22,32 @@ interface FieldErrors {
 // ─── Asosiy login forma ───────────────────────────────────────────────────────
 
 function LoginForm() {
-  const router       = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const { data: session, status } = useSession();
 
   const justRegistered = searchParams.get("registered") === "true";
-  const loginRequired  = searchParams.get("error") === "login_required";
+  const loginRequired = searchParams.get("error") === "login_required";
 
   const [formData, setFormData] = useState<FormData>({ username: "", password: "" });
-  const [fieldErrors, setFieldErrors]   = useState<FieldErrors>({});
-  const [serverError, setServerError]   = useState<string>("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [serverError, setServerError] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // ─── NextAuth (Google) sessiyasini va Django tokenini sinxronlash ───────────
+
+  useEffect(() => {
+    if (status === "authenticated" && session) {
+      const accessToken = (session as any).accessToken;
+      if (accessToken) {
+        localStorage.setItem("access", accessToken);
+        document.cookie = `access=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
+      }
+      router.push("/");
+      router.refresh();
+    }
+  }, [status, session, router]);
 
   // ─── Handlelar ────────────────────────────────────────────────────────────
 
@@ -50,7 +65,7 @@ function LoginForm() {
   function validate(): boolean {
     const errors: FieldErrors = {};
     if (!formData.username.trim()) errors.username = "Foydalanuvchi nomini kiriting";
-    if (!formData.password)        errors.password = "Parolni kiriting";
+    if (!formData.password) errors.password = "Parolni kiriting";
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   }
@@ -68,15 +83,13 @@ function LoginForm() {
 
     try {
       console.log("Login so'rovi yuborilmoqda...");
-      // Odatda Django SimpleJWT da endpoint /api/token/ bo'ladi, agar /api/login/ ishlamasa.
       const getApiBase = () => {
         if (typeof window !== "undefined") {
-          // Automatically uses '10.57.228.98' on mobile or 'localhost' on PC
           return `http://${window.location.hostname}:8000`;
         }
         return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
       };
-      
+
       const API_BASE = getApiBase();
       const endpoint = `${API_BASE}/api/token/`;
       const res = await fetch(endpoint, {
@@ -90,12 +103,12 @@ function LoginForm() {
 
       if (res.ok) {
         const data = await res.json();
-        localStorage.setItem("access",  data.access);
+        localStorage.setItem("access", data.access);
         localStorage.setItem("refresh", data.refresh);
         document.cookie = `access=${data.access}; path=/; max-age=86400; SameSite=Lax`;
-        
+
         router.push("/");
-        router.refresh(); 
+        router.refresh();
       } else {
         const data = await res.json();
         setServerError(
@@ -196,13 +209,13 @@ function LoginForm() {
             )}
 
             {/* Forma */}
-            <form 
-              id="login-form" 
+            <form
+              id="login-form"
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSubmit(e);
-              }} 
-              noValidate 
+              }}
+              noValidate
               className="space-y-4"
             >
 
@@ -317,11 +330,11 @@ function LoginForm() {
               className="inline-flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-200 bg-white text-sm font-medium text-zinc-700 transition-all hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-750 shadow-sm"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18px" height="18px">
-                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.73 17.74 9.5 24 9.5z"/>
-                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                <path fill="none" d="M0 0h48v48H0z"/>
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.73 17.74 9.5 24 9.5z" />
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                <path fill="none" d="M0 0h48v48H0z" />
               </svg>
               Google orqali kirish
             </button>
