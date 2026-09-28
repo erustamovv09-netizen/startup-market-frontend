@@ -20,32 +20,39 @@ const handler = NextAuth({
       // Dastlabki kiringanda token va user ma'lumotlarini saqlab qolamiz
       if (account && user) {
         console.log("Google User:", user.email);
+        // API URL ni aniqlash (fallback bilan)
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+        
+        let res: Response | null = null;
         try {
-          // API URL ni aniqlash (fallback bilan)
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-          
           // Backendga foydalanuvchi ma'lumotlarini yuborib tokenni olish
-          const res = await fetch(`${apiUrl}/api/google-login/`, {
+          res = await fetch(`${apiUrl}/api/google-login/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: user.email, name: user.name }),
           });
+        } catch (fetchError: any) {
+          console.error("Backend fetch xatosi (Tarmoq xatosi/ECONNRESET):", fetchError.message || fetchError);
+        }
 
+        if (res) {
           console.log("Django Response Status:", res.status);
-
           if (res.ok) {
-            const data = await res.json();
-            console.log("Django Token Data:", data);
-            // QAT'IY: Faqatgina Django qaytargan 'access' tokenni saqlash kerak
-            // Hech qachon account.access_token (Google tokeni) ni bu yerga qo'shmang!
-            token.accessToken = data.access;
+            try {
+              const data = await res.json();
+              console.log("Django Token Data:", data);
+              // QAT'IY: Faqatgina Django qaytargan 'access' tokenni saqlash kerak
+              token.accessToken = data.access;
+            } catch (jsonErr: any) {
+              console.error("JSON parchalash xatosi:", jsonErr.message);
+              token.accessToken = undefined;
+            }
           } else {
             const errorData = await res.text();
             console.error("Django qaytargan xato:", errorData);
             token.accessToken = undefined; // Xatolik bo'lsa token bo'sh qolishi kerak
           }
-        } catch (error) {
-          console.error("Google login backend xatosi:", error);
+        } else {
           token.accessToken = undefined;
         }
         token.id = user.id;
