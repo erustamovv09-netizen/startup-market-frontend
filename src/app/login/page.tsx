@@ -25,7 +25,7 @@ function LoginForm() {
   useEffect(() => {
     if (status === "authenticated" && session) {
       const accessToken = (session as any).accessToken;
-      
+
       // Agar NextAuth 'authenticated' bo'lsayu, lekin Django tokeni yo'q bo'lsa (Backend ulanmagan bo'lsa)
       // NextAuth'dan chiqaramiz, aks holda infinite loop (kirib-chiqish) bo'lib qoladi.
       if (!accessToken) {
@@ -152,7 +152,7 @@ function LoginForm() {
                   autoFocus
                   value={username}
                   onChange={(e) => { setUsername(e.target.value); setError(""); setDebugMsg(""); }}
-                  placeholder="johndoe"
+                  placeholder="rustamov"
                   className={inputCls}
                 />
               </div>
@@ -160,7 +160,7 @@ function LoginForm() {
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
                   <label htmlFor="login-password" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Parol</label>
-                  <Link href="/forgot-password" className="text-xs text-indigo-600 transition hover:text-indigo-700 dark:text-indigo-400">
+                  <Link href="/forgot-password" tabIndex={-1} className="text-xs text-indigo-600 transition hover:text-indigo-700 dark:text-indigo-400">
                     Parolni unutdingizmi?
                   </Link>
                 </div>
