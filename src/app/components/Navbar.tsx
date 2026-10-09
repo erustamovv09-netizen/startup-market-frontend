@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useMessages } from "./MessageContext";
 
 export default function Navbar() {
@@ -14,11 +14,47 @@ export default function Navbar() {
 
   const pathname = usePathname();
   const router = useRouter();
+  const { data: session, status } = useSession();
+
+  const checkAuth = () => {
+    const token = localStorage.getItem("access");
+    setIsLoggedIn(!!token);
+  };
+
+  // Google NextAuth orqali kirgan bo'lsa global tarzda tokenni LocalStorage'ga yozib qo'yamiz.
+  // Shunda foydalanuvchi Bosh sahifaga qaytsa darhol profilini ko'radi (yana /login ga kirishi shart emas).
+  useEffect(() => {
+    if (status === "authenticated" && session) {
+      const accessToken = (session as any).accessToken;
+      if (accessToken) {
+        const currentToken = localStorage.getItem("access");
+        if (currentToken !== accessToken) {
+          localStorage.setItem("access", accessToken);
+          document.cookie = `access=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
+          checkAuth();
+        }
+      }
+    }
+  }, [status, session]);
 
   useEffect(() => {
     setMounted(true);
-    const token = localStorage.getItem("access");
-    setIsLoggedIn(!!token);
+    checkAuth();
+
+    // localStorage o'zgarganda (boshqa tab yoki sahifadan) yangilash
+    window.addEventListener("storage", checkAuth);
+    // Sahifa fokusga qaytganda ham tekshirish
+    window.addEventListener("focus", checkAuth);
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("focus", checkAuth);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Har safar sahifa o'zgarganda ham token ni qayta tekshirish
+  useEffect(() => {
+    checkAuth();
   }, [pathname]);
 
   // Close menu on route change

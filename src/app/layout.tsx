@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "StartUp Market — IT loyihalar bozori",
   description:
-    "O'zbekistondagi eng yirik B2B IT loyihalar va startaplar bozori. Tayyor biznes xarid qiling yoki o'z loyihangizni soting.",
+    "O'zbekistondagi eng yirik B2B IT loyihalar va startaplar bozori. Tayyor biznes xarid qiling yoki o'z loyihangizni soting. ",
   keywords: "startup, IT loyiha, sotish, xarid, O'zbekiston, b2b marketplace",
   openGraph: {
     title: "StartUp Market — IT loyihalar bozori",
@@ -35,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-white dark:bg-zinc-950">
+
         {/* 2. Butun ilovani AuthProvider bilan o'rab chiqamiz */}
         <AuthProvider>
           <MessageProvider>

@@ -3,6 +3,7 @@ import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import MarketplaceClient, { type Startup } from "../components/marketplace-client";
 
 export default function StartupsPage() {
@@ -32,7 +33,9 @@ export default function StartupsPage() {
         if (res.status === 401 && activeToken) {
           localStorage.removeItem("access");
           localStorage.removeItem("refresh");
-          router.push("/login");
+          signOut({ redirect: false }).then(() => {
+            router.push("/login");
+          });
           return;
         }
 

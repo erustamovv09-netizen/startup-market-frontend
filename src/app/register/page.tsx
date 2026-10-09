@@ -38,8 +38,8 @@ export default function RegisterPage() {
     confirmPassword: "",
   });
 
-  const [fieldErrors, setFieldErrors]   = useState<FieldErrors>({});
-  const [serverError, setServerError]   = useState<string>("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [serverError, setServerError] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -107,7 +107,7 @@ export default function RegisterPage() {
         password: formData.password,
       };
       if (formData.firstName.trim()) payload.first_name = formData.firstName.trim();
-      if (formData.email.trim())     payload.email      = formData.email.trim();
+      if (formData.email.trim()) payload.email = formData.email.trim();
 
       const res = await fetch(`${API_BASE_URL}/api/register/`, {
         method: "POST",
@@ -138,16 +138,16 @@ export default function RegisterPage() {
     const p = formData.password;
     if (!p) return { level: 0, label: "", color: "" };
     let score = 0;
-    if (p.length >= 8)  score++;
+    if (p.length >= 8) score++;
     if (p.length >= 12) score++;
     if (/[A-Z]/.test(p)) score++;
     if (/[0-9]/.test(p)) score++;
     if (/[^A-Za-z0-9]/.test(p)) score++;
     if (score <= 1) return { level: 1, label: "Juda zaif", color: "bg-red-500" };
-    if (score <= 2) return { level: 2, label: "Zaif",      color: "bg-orange-500" };
-    if (score <= 3) return { level: 3, label: "O'rtacha",  color: "bg-yellow-500" };
-    if (score <= 4) return { level: 4, label: "Yaxshi",    color: "bg-emerald-400" };
-    return               { level: 5, label: "Kuchli",     color: "bg-emerald-500" };
+    if (score <= 2) return { level: 2, label: "Zaif", color: "bg-orange-500" };
+    if (score <= 3) return { level: 3, label: "O'rtacha", color: "bg-yellow-500" };
+    if (score <= 4) return { level: 4, label: "Yaxshi", color: "bg-emerald-400" };
+    return { level: 5, label: "Kuchli", color: "bg-emerald-500" };
   }
 
   const strength = passwordStrength();
@@ -228,7 +228,7 @@ export default function RegisterPage() {
                   required
                   value={formData.firstName}
                   onChange={handleChange}
-                  placeholder="Alibek"
+                  placeholder="Elshod"
                   className={`${inputBase} ${fieldErrors.firstName ? inputErr : inputOk}`}
                 />
                 {fieldErrors.firstName && (
@@ -249,7 +249,7 @@ export default function RegisterPage() {
                   required
                   value={formData.username}
                   onChange={handleChange}
-                  placeholder="johndoe"
+                  placeholder="rustamov"
                   className={`${inputBase} ${fieldErrors.username ? inputErr : inputOk}`}
                 />
                 {fieldErrors.username && (
@@ -322,16 +322,14 @@ export default function RegisterPage() {
                       {[1, 2, 3, 4, 5].map((i) => (
                         <div
                           key={i}
-                          className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                            i <= strength.level ? strength.color : "bg-zinc-200 dark:bg-zinc-700"
-                          }`}
+                          className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= strength.level ? strength.color : "bg-zinc-200 dark:bg-zinc-700"
+                            }`}
                         />
                       ))}
                     </div>
-                    <p className={`mt-1 text-xs font-medium ${
-                      strength.level <= 2 ? "text-red-500" :
+                    <p className={`mt-1 text-xs font-medium ${strength.level <= 2 ? "text-red-500" :
                       strength.level === 3 ? "text-yellow-600" : "text-emerald-600"
-                    }`}>
+                      }`}>
                       {strength.label}
                     </p>
                   </div>
@@ -363,13 +361,13 @@ export default function RegisterPage() {
                 {/* Mos kelish belgisi */}
                 {formData.confirmPassword && !fieldErrors.confirmPassword &&
                   formData.password === formData.confirmPassword && (
-                  <p className="mt-1 flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="12" height="12" className="h-3 w-3 shrink-0">
-                      <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
-                    </svg>
-                    Parollar mos keldi
-                  </p>
-                )}
+                    <p className="mt-1 flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="12" height="12" className="h-3 w-3 shrink-0">
+                        <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
+                      </svg>
+                      Parollar mos keldi
+                    </p>
+                  )}
               </div>
 
               {/* Submit tugma */}
@@ -408,11 +406,11 @@ export default function RegisterPage() {
               className="inline-flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-200 bg-white text-sm font-medium text-zinc-700 transition-all hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-750 shadow-sm"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18px" height="18px">
-                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.73 17.74 9.5 24 9.5z"/>
-                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                <path fill="none" d="M0 0h48v48H0z"/>
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.73 17.74 9.5 24 9.5z" />
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                <path fill="none" d="M0 0h48v48H0z" />
               </svg>
               Google orqali ro&apos;yxatdan o&apos;tish
             </button>

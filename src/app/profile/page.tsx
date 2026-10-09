@@ -4,6 +4,7 @@ import { API_BASE_URL } from "@/lib/api";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 // ─── Turlar ───────────────────────────────────────────────────────────────────
 
@@ -69,7 +70,9 @@ export default function ProfilePage() {
           localStorage.removeItem("access");
           localStorage.removeItem("refresh");
           document.cookie = "access=; path=/; max-age=0; SameSite=Lax";
-          router.push("/login");
+          signOut({ redirect: false }).then(() => {
+            router.push("/login");
+          });
           return;
         }
 
@@ -166,7 +169,9 @@ export default function ProfilePage() {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     document.cookie = "access=; path=/; max-age=0; SameSite=Lax";
-    router.push("/login");
+    signOut({ redirect: false }).then(() => {
+      router.push("/login");
+    });
   }
 
   // ── Avatar harfi ──────────────────────────────────────────────────────────

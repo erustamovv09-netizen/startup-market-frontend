@@ -4,6 +4,7 @@ import { API_BASE_URL } from "@/lib/api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import { StartupCard, type Startup } from "./components/marketplace-client";
 
 // ─── Asosiy sahifa (Himoyalangan Client Component) ─────────────────────────
@@ -33,10 +34,12 @@ export default function Home() {
         });
 
         if (res.status === 401 && activeToken) {
-          // Token eskirgan
+          // Token eskirgan bo'lsa, ham mahalliy ham NextAuth sessiyasini tozalaymiz
           localStorage.removeItem("access");
           localStorage.removeItem("refresh");
-          router.push("/login");
+          signOut({ redirect: false }).then(() => {
+            router.push("/login");
+          });
           return;
         }
 
