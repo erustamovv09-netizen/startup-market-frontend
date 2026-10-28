@@ -270,7 +270,7 @@ export default function RegisterPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="john@example.com"
+                  placeholder="rustamov@example.com"
                   className={`${inputBase} ${fieldErrors.email ? inputErr : inputOk}`}
                 />
                 {fieldErrors.email && (

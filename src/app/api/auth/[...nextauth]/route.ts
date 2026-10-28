@@ -24,6 +24,13 @@ declare module "next-auth/jwt" {
 console.log("Loaded GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
 console.log("Loaded GOOGLE_CLIENT_SECRET length:", process.env.GOOGLE_CLIENT_SECRET?.length);
 
+// Serverda (Production) NextAuth URL'ni avtomatik https://startupp.shop qilib sozlash
+if (!process.env.NEXTAUTH_URL || process.env.NEXTAUTH_URL.includes("169.58.123.200")) {
+  if (process.env.NODE_ENV === "production") {
+    process.env.NEXTAUTH_URL = "https://startupp.shop";
+  }
+}
+
 const handler = NextAuth({
   // Session strategiyasini eksplitsit JWT deb belgilaymiz
   session: {
