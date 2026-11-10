@@ -2,17 +2,23 @@
  * Markaziy API konfiguratsiyasi
  */
 export const API_BASE_URL = (() => {
-  // 1. Agar .env.local faylida NEXT_PUBLIC_API_URL bor bo'lsa (Production)
+  // 1. Agar environment o'zgaruvchisi berilgan bo'lsa
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
   }
 
-  // 2. Local kompyuter yoki Wi-Fi orqali telefonda test qilish uchun (Development)
+  // 2. Agar mijoz brauzerida ishlayotgan bo'lsa
   if (typeof window !== "undefined") {
-    return `http://${window.location.hostname}:8000`;
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1" || host.startsWith("192.168.")) {
+      return `http://${host}:8000`;
+    }
+    // Production domenda (startupp.shop, www.startupp.shop, vercel.app)
+    return "https://startup-market-backend.onrender.com";
   }
 
-  return "http://127.0.0.1:8000";
+  // 3. Server-side render uchun fallback
+  return "https://startup-market-backend.onrender.com";
 })();
 
 /**

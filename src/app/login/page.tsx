@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { API_BASE_URL } from "@/lib/api";
 
 // ─── Asosiy login forma ───────────────────────────────────────────────────────
 
@@ -19,7 +20,6 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [debugMsg, setDebugMsg] = useState("");
 
   // Google login sessiyasini sinxronlash
   useEffect(() => {
@@ -29,7 +29,6 @@ function LoginForm() {
       // Agar NextAuth 'authenticated' bo'lsayu, lekin Django tokeni yo'q bo'lsa (Backend ulanmagan bo'lsa)
       // NextAuth'dan chiqaramiz, aks holda infinite loop (kirib-chiqish) bo'lib qoladi.
       if (!accessToken) {
-        setDebugMsg("Google tokeni bor, lekin Backend tokeni yo'q. Tozalanmoqda...");
         signOut({ redirect: false });
         return;
       }
@@ -53,11 +52,8 @@ function LoginForm() {
     setIsSubmitting(true);
     setError("");
 
-    const apiUrl = `http://${window.location.hostname}:8000/api/token/`;
-    setDebugMsg(`Ulanilmoqda: ${apiUrl}`);
-
     try {
-      const res = await fetch(apiUrl, {
+      const res = await fetch(`${API_BASE_URL}/api/token/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -66,23 +62,18 @@ function LoginForm() {
         }),
       });
 
-      setDebugMsg(`Server javobi: ${res.status}`);
-
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem("access", data.access);
         localStorage.setItem("refresh", data.refresh);
         document.cookie = `access=${data.access}; path=/; max-age=86400; SameSite=Lax`;
-        setDebugMsg("✅ Token saqlandi");
         window.location.href = "/";
       } else {
         const data = await res.json().catch(() => ({}));
         setError(data.detail || "Foydalanuvchi nomi yoki parol noto'g'ri");
-        setDebugMsg(`❌ Xato: ${res.status}`);
       }
     } catch (err: any) {
       setError(`Serverga ulanib bo'lmadi: ${err.message}`);
-      setDebugMsg(`❌ Fetch xatosi: ${err.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -132,13 +123,6 @@ function LoginForm() {
               </div>
             )}
 
-            {/* Debug panel — muammoni aniqlash uchun */}
-            {debugMsg && (
-              <div className="mb-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 py-2">
-                <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400">{debugMsg}</p>
-              </div>
-            )}
-
             <form onSubmit={handleSubmit} noValidate className="space-y-4">
               <div>
                 <label htmlFor="login-username" className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -151,7 +135,7 @@ function LoginForm() {
                   autoComplete="username"
                   autoFocus
                   value={username}
-                  onChange={(e) => { setUsername(e.target.value); setError(""); setDebugMsg(""); }}
+                  onChange={(e) => { setUsername(e.target.value); setError(""); }}
                   placeholder="rustamov"
                   className={inputCls}
                 />
