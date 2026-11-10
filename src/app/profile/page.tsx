@@ -246,35 +246,13 @@ export default function ProfilePage() {
         </Link>
 
         {/* ── Sahifa sarlavhasi ── */}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-3xl">
-              Profilim
-            </h1>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              Hisob ma&apos;lumotlari va sozlamalar
-            </p>
-          </div>
-
-          <button
-            id="profile-logout-top"
-            type="button"
-            onClick={() => setLogoutModal(true)}
-            className="inline-flex h-8 md:h-9 items-center justify-center gap-1.5 self-start rounded-lg border border-red-200 bg-red-50 px-3 md:px-4 text-xs md:text-sm font-semibold text-red-600 transition-all hover:border-red-300 hover:bg-red-100 active:scale-95 dark:border-red-800/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50 sm:self-auto"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              width="14"
-              height="14"
-              className="h-3.5 w-3.5 shrink-0"
-            >
-              <path fillRule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" clipRule="evenodd" />
-              <path fillRule="evenodd" d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-1.08a.75.75 0 1 1 1.004-1.116l2.5 2.25a.75.75 0 0 1 0 1.116l-2.5 2.25a.75.75 0 1 1-1.004-1.116l1.048-1.08H6.75A.75.75 0 0 1 6 10Z" clipRule="evenodd" />
-            </svg>
-            Chiqish
-          </button>
+        <div className="mb-8">
+          <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-3xl">
+            Profilim
+          </h1>
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+            Hisob ma&apos;lumotlari va sozlamalar
+          </p>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-3">
